@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from database_utils import DatabaseUtils
 import re
 
@@ -7,6 +7,8 @@ app.secret_key = 'secret'
 db = DatabaseUtils()
 db.create_account_table()
 
+
+# --------------------------------------------LOGIN PAGE-----------------------------------------------------
 
 # http://localhost:5000/pythonlogin/ - this will be the login page, we need to use both GET and POST requests
 @app.route('/')
@@ -38,6 +40,8 @@ def login():
     return render_template('index.html', msg=msg)
 
 
+# --------------------------------------------LOGOUT PAGE-----------------------------------------------------
+
 # http://localhost:5000/python/logout - this will be the logout page
 @app.route('/pythonlogin/logout')
 def logout():
@@ -48,6 +52,8 @@ def logout():
     # Redirect to login page
     return redirect(url_for('login'))
 
+
+# --------------------------------------------REGISTER PAGE-----------------------------------------------------
 
 # http://localhost:5000/pythinlogin/register - this will be the registration page,
 # we need to use both GET and POST requests
@@ -83,6 +89,8 @@ def register():
     return render_template('register.html', msg=msg)
 
 
+# --------------------------------------------HOME PAGE-----------------------------------------------------
+
 # http://localhost:5000/pythinlogin/home - this will be the home page, only accessible for loggedin users
 @app.route('/pythonlogin/home')
 def home():
@@ -94,19 +102,79 @@ def home():
     return redirect(url_for('login'))
 
 
+# --------------------------------------------PROFILE PAGE-----------------------------------------------------
+
 # http://localhost:5000/pythinlogin/profile - this will be the profile page, only accessible for loggedin users
 @app.route('/pythonlogin/profile')
 def profile():
     # Check if user is loggedin
     if 'loggedin' in session:
-        print(session['id'])
-        account = db.get_account(session['id'])
+        account = db.get_an_user(session['username'])
 
         # Show the profile page with account info
         return render_template('profile.html', account=account)
 
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+
+# --------------------------------------------BOOKING PAGE-----------------------------------------------------
+
+@app.route('/bookingNow/', methods=['GET', 'POST'])
+def booking():
+    cabs_list = ["Hatchback", "Sedan", "SUV"]
+    try:
+        car_empty = False
+        driver_empty = False
+
+        userId = request.form["userId"]
+        account = db.check_exist_username(userId)
+        # If account exists show error and validation checks
+        if not account:
+            flash("Entered Username does not Exist !!!")
+            return render_template('booking.html')
+
+        cab = int(request.form["cab"])
+        cab_name = cabs_list[cab]
+        startDate = request.form["startDate"]
+        endDate = request.form["endDate"]
+        time = request.form["time"]
+        pickupLocation = request.form["pickupLocation"]
+        dropoffLocation = request.form["dropoffLocation"]
+
+        # check the availability of the Car
+        car = db.get_available_car(cab_name)
+        if not car:
+            flash("The Car is currently not available")
+            return redirect(url_for('allbooked'))
+
+        car_id = car['Car_id']
+        db.update_car(car_id)
+        db.insert_booking(userId, cab_name, startDate, endDate, time, pickupLocation, dropoffLocation)
+
+        # global CARID
+        # CARID = carid[:]
+        # global b_actual_id
+        # cursor.execute("""select bookingId from Booking where Pickup_time=%s and startDate=%s """, [time, startDate])
+        # b_id = cursor.fetchall()
+        # b_actual_id = b_id[0][0]
+        # print(b_actual_id)
+        # print("Booked")
+        # print("Booked")
+
+    except Exception as e:
+        return str(e)
+
+    return render_template('booking.html')
+
+
+# --------------------------------------------ALL BOOKED PAGE-----------------------------------------------------
+
+@app.route('/allbooked/', methods=['GET', 'POST'])
+def allbooked():
+    print("Entered")  # Testing
+
+    return render_template("allbooked.html")
 
 
 if __name__ == "__main__":
