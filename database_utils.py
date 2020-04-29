@@ -38,8 +38,7 @@ class DatabaseUtils:
             """)
 
         self.connection.commit()
-        
-        
+            
     def insert_account(self, username, password, email):
         with self.connection.cursor() as cursor:
             cursor.execute("INSERT INTO accounts VALUES (NULL, %s, %s, %s)", (username, password, email,))
