@@ -4,7 +4,7 @@ import pymysql  # MySQLdb  # pymysql
 
 class DatabaseUtils:
     app = Flask(__name__)
-
+    
     HOST = "35.201.23.126"  # google cloud IP address
     USER = "root"  # google cloud sql user name
     PASSWORD = "andrewishandsome"  # google cloud sql password
@@ -15,7 +15,7 @@ class DatabaseUtils:
             connection = pymysql.connect(DatabaseUtils.HOST, DatabaseUtils.USER,
                                          DatabaseUtils.PASSWORD, DatabaseUtils.DATABASE)
         self.connection = connection
-
+        
     def close(self):
         self.connection.close()
 
@@ -38,7 +38,7 @@ class DatabaseUtils:
             """)
 
         self.connection.commit()
-
+            
     def insert_account(self, username, password, email):
         with self.connection.cursor() as cursor:
             cursor.execute("INSERT INTO accounts VALUES (NULL, %s, %s, %s)", (username, password, email,))
