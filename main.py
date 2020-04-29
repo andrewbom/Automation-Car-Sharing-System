@@ -4,11 +4,8 @@ import re
 
 app = Flask(__name__)
 app.secret_key = 'secret'
-
-
-def main(self):  # add error handling
-    with DatabaseUtils() as db:
-        db.create_account_table()
+db = DatabaseUtils()
+db.create_account_table()
 
 
 # http://localhost:5000/pythonlogin/ - this will be the login page, we need to use both GET and POST requests
@@ -22,22 +19,23 @@ def login():
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
-        with DatabaseUtils() as db:
-            account = db.login_account(username, password)
 
-            # If account exists in accounts table in out database
-            if account:
-                # Create session data, we can access this data in other routes
-                session['loggedin'] = True
-                session['id'] = account['id']
-                session['username'] = account['username']
-                # Redirect to home page
-                return redirect(url_for('home'))
-            else:
-                # Account doesnt exist or username/password incorrect
-                msg = 'Incorrect username/password!'
+        account = db.login_account(username, password)
+
+        # If account exists in accounts table in out database
+        if account:
+            # Create session data, we can access this data in other routes
+            session['loggedin'] = True
+            session['id'] = account['id']
+            session['username'] = account['username']
+            # Redirect to home page
+            return redirect(url_for('home'))
+        else:
+            # Account doesnt exist or username/password incorrect
+            msg = 'Incorrect username/password!'
+
     # Show the login form with message (if any)
-    return render_template('index.html', msg='')
+    return render_template('index.html', msg=msg)
 
 
 # http://localhost:5000/python/logout - this will be the logout page
@@ -64,20 +62,19 @@ def register():
         password = request.form['password']
         email = request.form['email']
 
-        with DatabaseUtils() as db:
-            account = db.check_exist_username(username)
-            # If account exists show error and validation checks
-            if account:
-                msg = 'Account already exists!'
-            elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-                msg = 'Invalid email address!'
-            elif not re.match(r'[A-Za-z0-9]+', username):
-                msg = 'Username must contain only characters and numbers!'
-            elif not username or not password or not email:
-                msg = 'Please fill out the form!'
-            else:
-                db.insert_account(username, password, email)
-                msg = 'You have successfully registered!'
+        account = db.check_exist_username(username)
+        # If account exists show error and validation checks
+        if account:
+            msg = 'Account already exists!'
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            msg = 'Invalid email address!'
+        elif not re.match(r'[A-Za-z0-9]+', username):
+            msg = 'Username must contain only characters and numbers!'
+        elif not username or not password or not email:
+            msg = 'Please fill out the form!'
+        else:
+            db.insert_account(username, password, email)
+            msg = 'You have successfully registered!'
 
     elif request.method == 'POST':
         # Form is empty... (no POST data)
@@ -103,11 +100,10 @@ def profile():
     # Check if user is loggedin
     if 'loggedin' in session:
         print(session['id'])
-        with DatabaseUtils() as db:
-            account = db.get_account(session['id'])
+        account = db.get_account(session['id'])
 
-            # Show the profile page with account info
-            return render_template('profile.html', account=account)
+        # Show the profile page with account info
+        return render_template('profile.html', account=account)
 
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
