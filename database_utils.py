@@ -39,37 +39,40 @@ class DatabaseUtils:
             """)
 
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS `Booking` (
-                    `bookingId` int(50) NOT NULL AUTO_INCREMENT,
-                    `username` varchar(100) DEFAULT NULL,
-                    `Cab` varchar(100) DEFAULT NULL,
-                    `startDate` varchar(100) DEFAULT NULL,
-                    `endDate` varchar(100) DEFAULT NULL,
-                    `Pickup_time` varchar(100) DEFAULT NULL,
-                    `Pickup_location` varchar(100) DEFAULT NULL,
-                    `Drop_off_location` varchar(100) DEFAULT NULL,
-                    `driverId` int(50) DEFAULT NULL,
-                    `carid` varchar(100) DEFAULT NULL,
-                    `cab_route` varchar(500) DEFAULT NULL,
-                    PRIMARY KEY (`bookingId`),
-                    KEY `username` (`username`),
-                    KEY `driverId` (`driverId`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            """)  # CONSTRAINT `Booking_ibfk_2` FOREIGN KEY (`driverId`) REFERENCES `Driver` (`driverId`)
-            # CONSTRAINT `Booking_ibfk_1` FOREIGN KEY (`username`) REFERENCES `Cust_User` (`username`)
+                CREATE TABLE IF NOT EXISTS `Cars_list` (
+                    `car_id` int(15) NOT NULL AUTO_INCREMENT,
+                    `make_name` varchar(100) NOT NULL,
+                    `model_name` varchar(100) DEFAULT NULL,
+                    `registration_no` varchar(10) DEFAULT NULL,
+                    `seating_capacity` varchar(1) DEFAULT NULL,
+                    `car_type` int(1) DEFAULT NULL COMMENT '1:Sedan | 2:Hatch | 3:SUV',
+                    `price_per_km` varchar(10) DEFAULT NULL,
+                    `status` int(1) DEFAULT NULL COMMENT '1:Available | 2:Not Available',
+                    PRIMARY KEY (`car_id`)                    
+                ) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
+            """)
+            cursor.execute("""
+                INSERT INTO `Cars_list` VALUES (NULL, 'Toyota', 'Camry', 'ASDQWE', '4', 1, '15', 1);
+
+            """)
 
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS `Car` (
-                    `Car_id` varchar(100) NOT NULL,
-                    `model_name` varchar(100) DEFAULT NULL,
-                    `registration_no` varchar(100) DEFAULT NULL,
-                    `seating_capacity` varchar(100) DEFAULT NULL,
-                    `Car_type` varchar(100) DEFAULT NULL,
-                    `price_per_km` varchar(100) DEFAULT NULL,
-                    `status` varchar(100) DEFAULT 'Available',
-                    PRIMARY KEY (`Car_id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                CREATE TABLE IF NOT EXISTS `Booking` (
+                    `booking_id` int(11) NOT NULL AUTO_INCREMENT,
+                    `start_date` varchar(30) NOT NULL,
+                    `end_date` varchar(30) NOT NULL,
+                    `pickup_time` varchar(30) NOT NULL,
+                    `booking_amount` decimal(10,0) NOT NULL,
+                    `booking_status` int(11) NOT NULL COMMENT '1:Booked | 2:Canceled',
+                    `canceled_date_time` timestamp NULL DEFAULT NULL,
+                    `username` varchar(50),
+                    `car_id` int(15),
+                    PRIMARY KEY (`booking_id`),
+                    FOREIGN KEY (`username`) REFERENCES Cust_User(`username`) ON UPDATE CASCADE,
+                    FOREIGN KEY (`car_id`) REFERENCES Cars_list(`car_id`) ON UPDATE CASCADE                    
+                ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
             """)
+
         self.connection.commit()
 
     def insert_account(self, username, password, email):
@@ -95,23 +98,24 @@ class DatabaseUtils:
 
         return cursor.fetchone()
 
-    def get_available_car(self, car_name):
+    def get_available_car(self, car_type):
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT Car_id FROM Car WHERE status = 'Available' and Car_type = %s ", [car_name])
+        cursor.execute("SELECT car_id FROM Cars_list WHERE status = 1 and car_type = %d ", car_type)
 
         return cursor.fetchone()
 
     def update_car(self, car_id):
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("UPDATE Car SET status = 'BOOKED' WHERE Car_id = %s", [car_id])
+        cursor.execute("UPDATE Cars_list SET status = 2 WHERE car_id = %s", car_id)
 
         self.connection.commit()
 
-    def insert_booking(self, userId, cab_name, startDate, endDate, time, pickupLocation, dropoffLocation):
+    def insert_booking(self, userId, car_id, startDate, endDate, _time):
         with self.connection.cursor() as cursor:
-            cursor.execute("INSERT INTO Booking(userId,Cab,startDate,endDate,Pickup_time,Pickup_location,"
-                           "Drop_off_location) VALUES (%s,%s,%s,%s,%s,%s,%s)",
-                           (userId, cab_name, startDate, endDate, time, pickupLocation, dropoffLocation))
+            cursor.execute("INSERT INTO Booking(username,car_id,start_date,end_date,pickup_time) "
+                           "VALUES (%s,%s,%s,%s,%s)",
+                           (userId, car_id, startDate, endDate, _time))
+            cursor.execute("UPDATE Booking SET booking_status = 1 WHERE car_id = %s", car_id)
         self.connection.commit()
 
 

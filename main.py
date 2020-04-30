@@ -120,61 +120,48 @@ def profile():
 
 # --------------------------------------------BOOKING PAGE-----------------------------------------------------
 
-@app.route('/bookingNow/', methods=['GET', 'POST'])
+@app.route('/booking_now/')
 def booking():
-    cabs_list = ["Hatchback", "Sedan", "SUV"]
-    try:
-        car_empty = False
-        driver_empty = False
+    # Get input from the user
+    # then search cars
+    # fetch cars
+    if request.method == 'POST' and 'cab' in request.form and 'startDate' in request.form and 'endDate' in request.form \
+            and 'time' in request.form:
+        # Check if user is logged in
+        if 'loggedin' in session:
+            account = db.get_an_user(session['username'])
 
-        userId = request.form["userId"]
-        account = db.check_exist_username(userId)
-        # If account exists show error and validation checks
-        if not account:
-            flash("Entered Username does not Exist !!!")
-            return render_template('booking.html')
+            car_type = request.form.get('cab')  # this grab the value of the selection in booking.html file
+            start_date = request.form.get('startDate')
+            end_Date = request.form.get('endDate')
+            _time = request.form.get('time')
+            # pick_up_location = request.form["pickupLocation"]
+            # drop_off_location = request.form["dropoffLocation"]
 
-        cab = int(request.form["cab"])
-        cab_name = cabs_list[cab]
-        startDate = request.form["startDate"]
-        endDate = request.form["endDate"]
-        time = request.form["time"]
-        pickupLocation = request.form["pickupLocation"]
-        dropoffLocation = request.form["dropoffLocation"]
+            # check the availability of the Car
+            car_id = db.get_available_car(car_type)
+            if not car_id:
+                flash("The Car is currently not available")
+                return redirect(url_for('booking'))
 
-        # check the availability of the Car
-        car = db.get_available_car(cab_name)
-        if not car:
-            flash("The Car is currently not available")
-            return redirect(url_for('allbooked'))
+            db.update_car(car_id)
+            db.insert_booking(session['username'], car_id, start_date, end_Date, _time)
 
-        car_id = car['Car_id']
-        db.update_car(car_id)
-        db.insert_booking(userId, cab_name, startDate, endDate, time, pickupLocation, dropoffLocation)
+            # global CARID
+            # CARID = carid[:]
+            # global b_actual_id
 
-        # global CARID
-        # CARID = carid[:]
-        # global b_actual_id
-        # cursor.execute("""select bookingId from Booking where Pickup_time=%s and startDate=%s """, [time, startDate])
-        # b_id = cursor.fetchall()
-        # b_actual_id = b_id[0][0]
-        # print(b_actual_id)
-        # print("Booked")
-        # print("Booked")
+            # Show the booking page
+            return render_template('booking.html', account=account)
 
-    except Exception as e:
-        return str(e)
+        else:
+            # User is not logged in and redirect to login page
+            flash("You have been logged out. Please login again.")
+            return redirect(url_for('login'))
 
     return render_template('booking.html')
 
-
 # --------------------------------------------ALL BOOKED PAGE-----------------------------------------------------
-
-@app.route('/allbooked/', methods=['GET', 'POST'])
-def allbooked():
-    print("Entered")  # Testing
-
-    return render_template("allbooked.html")
 
 
 if __name__ == "__main__":
