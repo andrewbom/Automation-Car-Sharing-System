@@ -1,10 +1,13 @@
 {% extends 'layout.html' %} {% block title %}New Booking{% endblock %} {% block content %}
 <h2>New Booking Page</h2>
+{% for message in get_flashed_messages() %}
+<p>{{ message }}</p>
+{% endfor %}
 <div>
     <div class="container">
         <div class="row">
             <div class="col-5">
-                <form action="{{url_for('booking')}}" method="POST">
+                <form action="{{url_for('search')}}" method="POST">
                     <div class="form-group">
                         <label>Car Type</label>
                         <select name="carType" class="form-control">
@@ -42,6 +45,23 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for car in cars %}
+                        <tr>
+                            <td>{{ car.make_name }} {{ car.model_name }}</td>
+                            <td>{{ car.car_type }}</td>
+                            <td>{{ car.seating_capacity }}</td>
+                            <td>{{ car.price_per_km }}</td>
+                            <td>
+                                {% if car.status == 'Available' %}
+                                <form action="{{ url_for('booking')}}" method="POST">
+                                    <center><button type= "submit" class="btn btn-success btn-sm">
+                                        Book Now!
+                                    </button></center>
+                                {% endif %}
+                                </form>
+                            </td>
+                        {% endfor %}
+                        </tr>
                     </tbody>
                 </table>
             </div>
