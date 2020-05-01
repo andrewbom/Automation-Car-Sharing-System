@@ -10,26 +10,28 @@ db.create_account_table()
 
 # --------------------------------------------LOGIN PAGE-----------------------------------------------------
 
-# http://localhost:5000/pythonlogin/ - this will be the login page, we need to use both GET and POST requests
+# http://localhost:5000/carrental/ - this will be the login page, we need to use both GET and POST requests
 @app.route('/')
-@app.route('/pythonlogin/', methods=['GET', 'POST'])
+@app.route('/carrental/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
     msg = ''
     # Check if "username" and "password" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+    if request.method == 'POST':
         # Create variables for easy access
-        username = request.form['username']
+        email = request.form['username']
         password = request.form['password']
 
-        account = db.login_account(username, password)
+        account = db.login_account(email, password)
 
         # If account exists in accounts table in out database
         if account:
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
+            session['id'] = account['customer_id']
+            session['firstname'] = account['first_name']
+            session['lastname'] = account['last_name']
+            session['email'] = account['email']
             # Redirect to home page
             return redirect(url_for('home'))
         else:
@@ -42,8 +44,8 @@ def login():
 
 # --------------------------------------------LOGOUT PAGE-----------------------------------------------------
 
-# http://localhost:5000/python/logout - this will be the logout page
-@app.route('/pythonlogin/logout')
+# http://localhost:5000/carrental/logout - this will be the logout page
+@app.route('/carrental/logout')
 def logout():
     # Remove session data, this will log the user out
     session.pop('loggedin', None)
@@ -55,49 +57,49 @@ def logout():
 
 # --------------------------------------------REGISTER PAGE-----------------------------------------------------
 
-# http://localhost:5000/pythinlogin/register - this will be the registration page,
+# http://localhost:5000/carrental/register - this will be the registration page,
 # we need to use both GET and POST requests
-@app.route('/pythonlogin/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
+@app.route('/carrental/register', methods=['GET', 'POST'])
 def register():
     # Output message if something goes wrong...
     msg = ''
     # Check if "username", "password" and "email" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+    if request.method == 'POST':
         # Create variables for easy access
-        username = request.form['username']
-        password = request.form['password']
+        firstname = request.form['first_name']
+        lastname = request.form['last_name']
         email = request.form['email']
+        password = request.form['password']
 
-        account = db.check_exist_username(username)
+        account = db.check_exist_username(email)
+        print(account)
         # If account exists show error and validation checks
         if account:
             msg = 'Account already exists!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
-        elif not re.match(r'[A-Za-z0-9]+', username):
-            msg = 'Username must contain only characters and numbers!'
-        elif not username or not password or not email:
+        # elif not re.match(r'[A-Za-z0-9]+', email):
+        #     msg = 'Username must contain only characters and numbers!'
+        elif not firstname or not lastname or not email or not password:
             msg = 'Please fill out the form!'
         else:
-            db.insert_account(username, password, email)
+            db.insert_account(firstname, lastname, email, password)
             msg = 'You have successfully registered!'
 
-    elif request.method == 'POST':
-        # Form is empty... (no POST data)
-        msg = 'Please fill out the form!'
     # Show registration form with message (if any)
     return render_template('register.html', msg=msg)
 
 
 # --------------------------------------------HOME PAGE-----------------------------------------------------
 
-# http://localhost:5000/pythinlogin/home - this will be the home page, only accessible for loggedin users
-@app.route('/pythonlogin/home')
+# http://localhost:5000/carrental/home - this will be the home page, only accessible for loggedin users
+@app.route('/carrental/home')
 def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('home.html', username=session['username'])
+        return render_template('home.html', username=session['firstname'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -120,48 +122,94 @@ def profile():
 
 # --------------------------------------------BOOKING PAGE-----------------------------------------------------
 
-@app.route('/booking_now/')
+# http://localhost:5000/carrental/booking - this will be the home page, only accessible for loggedin users
+@app.route('/carrental/booking/', methods=['GET', 'POST'])
 def booking():
     # Get input from the user
     # then search cars
     # fetch cars
-    if request.method == 'POST' and 'cab' in request.form and 'startDate' in request.form and 'endDate' in request.form \
-            and 'time' in request.form:
+    if request.method == 'POST':
         # Check if user is logged in
         if 'loggedin' in session:
-            account = db.get_an_user(session['username'])
-
-            car_type = request.form.get('cab')  # this grab the value of the selection in booking.html file
+            # account = db.get_an_user(session['username'])
+            
+            print(request.form)
+            car_type = request.form.get('carType')  # this grab the value of the selection in booking.html file
             start_date = request.form.get('startDate')
             end_Date = request.form.get('endDate')
-            _time = request.form.get('time')
+            pickup_time = request.form.get('pickupTime')
+            
+
+            # check the availability of the Car
+            cars = db.get_available_car(car_type)
+            print(cars)
+            if not cars:
+                flash("The Car is currently not available")
+                return redirect(url_for('booking'))
+
+
             # pick_up_location = request.form["pickupLocation"]
             # drop_off_location = request.form["dropoffLocation"]
 
             # check the availability of the Car
-            car_id = db.get_available_car(car_type)
-            if not car_id:
-                flash("The Car is currently not available")
-                return redirect(url_for('booking'))
+            # car_id = db.get_available_car(car_type)
+            # if not car_id:
+            #     flash("The Car is currently not available")
+            #     return redirect(url_for('booking'))
 
-            db.update_car(car_id)
-            db.insert_booking(session['username'], car_id, start_date, end_Date, _time)
+            # db.update_car(car_id)
+            # db.insert_booking(session['username'], car_id, start_date, end_Date, _time)
 
             # global CARID
             # CARID = carid[:]
             # global b_actual_id
 
             # Show the booking page
-            return render_template('booking.html', account=account)
+            return render_template('new_booking.html', username=session['firstname'])
 
         else:
             # User is not logged in and redirect to login page
             flash("You have been logged out. Please login again.")
             return redirect(url_for('login'))
 
-    return render_template('booking.html')
+    return render_template('new_booking.html', username=session['firstname'])
 
-# --------------------------------------------ALL BOOKED PAGE-----------------------------------------------------
+# --------------------------------------------CAR LIST PAGE-----------------------------------------------------
+
+# http://localhost:5000/carrental/profile - this will be the Cars List page, only accessible for loggedin users
+@app.route('/carrental/carslist')
+def carslist():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+
+        # check the availability of the Cars List
+        carlist = db.get_all_available_cars()
+
+        # Show the Cars List
+        return render_template('cars.html', username=session['firstname'], cars=carlist)
+
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+# --------------------------------------------BOOKING HISTORY PAGE-----------------------------------------------------
+
+# http://localhost:5000/carrental/profile - this will be the Cars List page, only accessible for loggedin users
+@app.route('/carrental/bookinghistory')
+def bookinghistory():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+
+        customerid = session['id']
+
+        # check the booking history of logged in customer
+        bookingshistory = db.get_customer_booking_history(customerid)
+        print(bookingshistory)
+
+        # Show the Cars List
+        return render_template('booking_history.html', username=session['firstname'], bookings=bookingshistory)
+
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 
 if __name__ == "__main__":

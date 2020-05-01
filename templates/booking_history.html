@@ -1,0 +1,36 @@
+{% extends 'layout.html' %} {% block title %}Booking History{% endblock %} {% block content %}
+<h2>Booking History Page</h2>
+<div>
+    <p>Booking History:</p>
+    <table class="table thead-dark table-bordered">
+        <thead>
+            <tr>
+                <th>Car</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Pickup Time</th>
+                <th>Booking Amount</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.make_name }} {{ booking.model_name }}</td>
+                <td>{{ booking.start_date }}</td>
+                <td>{{ booking.end_date }}</td>
+                <td>{{ booking.pickup_time }}</td>
+                <td>${{ booking.booking_amount }}</td>
+                <td>{{ booking.booking_status }}</td>
+                <td>
+                    {% if booking.booking_status == 'booked' %}
+                    <center><button class="btn btn-danger btn-sm">Cancel Booking</button></center>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

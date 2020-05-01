@@ -1,0 +1,51 @@
+{% extends 'layout.html' %} {% block title %}New Booking{% endblock %} {% block content %}
+<h2>New Booking Page</h2>
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <form action="{{url_for('booking')}}" method="POST">
+                    <div class="form-group">
+                        <label>Car Type</label>
+                        <select name="carType" class="form-control">
+                            <option value="0">Select Car Type</option>
+                            <option value="1">Sedan</option>
+                            <option value="2">Hatch</option>
+                            <option value="3">SUV</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="text" class="form-control" name="startDate" placeholder="DD-MM-YYYY">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="text" class="form-control" name="endDate" placeholder="DD-MM-YYYY">
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="text" class="form-control" name="pickupTime" placeholder="HH:MM">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search Now</button>
+                </form>
+            </div>
+            <div class="col-7">
+                <label>Search Results</label>
+                <table class="table thead-dark table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>Make/Model</th>
+                            <th>Type</th>
+                            <th>Seating</th>
+                            <th>Price (Per Km)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
