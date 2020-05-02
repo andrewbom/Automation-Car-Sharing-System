@@ -45,23 +45,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for car in cars %}
+                        {% for car in carlist %}
                         <tr>
                             <td>{{ car.make_name }} {{ car.model_name }}</td>
                             <td>{{ car.car_type }}</td>
                             <td>{{ car.seating_capacity }}</td>
                             <td>{{ car.price_per_km }}</td>
                             <td>
-                                {% if car.status == 'Available' %}
-                                <form action="{{ url_for('booking')}}" method="POST">
-                                    <center><button type= "submit" class="btn btn-success btn-sm">
+                                <center>
+                                    <a href="{{ url_for('search') }}/{{ car.car_id }}/{{ car.price_per_km }}" class="btn btn-success btn-sm">
                                         Book Now!
-                                    </button></center>
-                                {% endif %}
-                                </form>
+                                    </a>
+                                </center>
                             </td>
-                        {% endfor %}
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

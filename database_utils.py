@@ -5,9 +5,9 @@ import pymysql  # MySQLdb  # pymysql
 class DatabaseUtils:
     app = Flask(__name__)
 
-    HOST = "35.201.23.126"  # google cloud IP address
+    HOST = "34.87.232.2"  # google cloud IP address
     USER = "root"  # google cloud sql user name
-    PASSWORD = "andrewishandsome"  # google cloud sql password
+    PASSWORD = "123456789"  # google cloud sql password
     DATABASE = "Pythonlogin"
 
     def __init__(self, connection=None):
@@ -66,9 +66,11 @@ class DatabaseUtils:
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
             """)
             cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Toyota', 'Camry', '1AB 2CD', '4', 1, '15', "
-                           "'Not Available');")
+                           "'available');")
             cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Mazda', 'CX-5', '2YM 5CD', '4', 3, '20', "
-                           "'Available');")
+                           "'available');")
+            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Nissan', 'Altima', '5GH 3XC', '4', 1, '10', "
+                           "'available');")
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS `bookings` (
@@ -87,7 +89,7 @@ class DatabaseUtils:
             cursor.execute("INSERT IGNORE INTO `bookings` VALUES (NULL, 1, 1, '07-04-2020', '10-04-2020', '13:45', "
                            "'155.00', 'booked', NULL);")
             cursor.execute("INSERT IGNORE INTO `bookings` VALUES (NULL, 1, 2, '10-03-2020', '15-03-2020', '13:45', "
-                           "'123.00', 'Canceled', NULL);")
+                           "'123.00', 'booked', NULL);")
 
         self.connection.commit()
 
@@ -117,7 +119,7 @@ class DatabaseUtils:
 
     def get_all_available_cars(self):
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT * FROM cars_list WHERE status = 'Available'")
+        cursor.execute("SELECT * FROM cars_list WHERE status = 'available'")
 
         return cursor.fetchall()
 
@@ -138,7 +140,7 @@ class DatabaseUtils:
     def get_all_available_car_type(self, car_type):
         print(type(car_type))
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT * FROM cars_list WHERE status = 'Available' and car_type = %s", car_type)
+        cursor.execute("SELECT * FROM cars_list WHERE status = 'available' and car_type = %s", car_type)
 
         return cursor.fetchall()
 
@@ -150,29 +152,10 @@ class DatabaseUtils:
         self.connection.commit()
 
     # Can you simplify the queries here ??????????????????????????????????????
-    def update_booking(self, customer_id):
+    def update_booking(self, bookingid):
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-        # update the booking status to 'cancelled'
         cursor.execute("UPDATE bookings "
                        "SET booking_status = 'cancelled' "
-                       "WHERE customer_id = %s",
-                       customer_id)
-
-        # Need to fix here since it will get 2 car_id and thus, CANNOT update car status
-        car_id = cursor.execute("SELECT car_id FROM bookings WHERE customer_id = %s", customer_id)
-
-        # update the car status to 'Available'
-        cursor.execute("UPDATE cars_list "
-                       "SET status = 'Available' "
-                       "WHERE car_id = %s",
-                       car_id)
-
+                       "WHERE booking_id = %s",
+                       bookingid)
         self.connection.commit()
-
-        # cursor.execute("UPDATE cars_list, bookings "
-        #                "SET b.booking_status = 'cancelled', cl.status = 'Available' "
-        #                "FROM customers c "
-        #                "JOIN bookings b on c.customer_id = b.customer_id JOIN "
-        #                "cars_list cl on b.car_id = cl.car_id "
-        #                "WHERE c.customer_id = %s",
-        #                customer_id)

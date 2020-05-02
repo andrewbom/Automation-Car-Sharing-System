@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from database_utils import DatabaseUtils
+from datetime import datetime
 import re
 
 app = Flask(__name__)
@@ -12,7 +13,7 @@ db.create_account_table()
 
 # http://localhost:5000/carrental/ - this will be the login page, we need to use both GET and POST requests
 @app.route('/')
-@app.route('/carrental/', methods=['GET', 'POST'])
+@app.route('/carrental', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
     msg = ''
@@ -128,30 +129,62 @@ def profile():
 # --------------------------------------------SEARCH PAGE-----------------------------------------------------
 
 # http://localhost:5000/carrental/search - this will be the search page, only accessible for loggedin users
-@app.route('/carrental/search/', methods=['GET', 'POST'])
-def search():
+@app.route('/carrental/search', methods=['GET', 'POST'])
+@app.route('/carrental/search/<carid>/<amount>', methods=['GET', 'POST'])
+def search(carid=0,amount=0):
 
     # Check if user is logged in and has filled the form
-    if 'loggedin' in session and 'carType' in request.form and 'startDate' in request.form \
-            and 'endDate' in request.form and 'pickupTime' in request.form:
+    if 'loggedin' in session:
+        cars = []
+        date_format = "%d-%m-%Y"
 
-        # check the availability of the Car by getting the value of the selection in new_booking.html file
-        cars = db.get_all_available_car_type(int(request.form.get('carType')))
-        print(cars)
-        if not cars:
-            flash("The car type that you have selected is currently NOT available")
-            return redirect(url_for('search'))
-        elif cars:
-            # Create session data, we may access these data in booking routes for future booking
-            session['car_type'] = int(request.form.get('carType'))
-            session['start_Date'] = request.form.get('startDate')
-            session['end_Date'] = request.form.get('endDate')
-            session['pick_up_Time'] = request.form.get('pickupTime')
-            session['booking_status'] = 'booked'
-            session['car_id'] = 888  # don't know how to fetch a particular car_id from searching result
+        if request.method == 'POST':
+            car_type = request.form['carType']
+            start_date = request.form['startDate']
+            end_date = request.form['endDate']
+            pickup_time = request.form['pickupTime']
+            
+            if car_type:
+                # print(car_type)
+                # session['search']['start_date'] = request.form('startDate')
+                # session['search']['end_date'] = request.form.get('endDate')
+                # session['search']['pickup_time'] = request.form('pickupTime')
+
+                date_one = datetime.strptime(start_date, date_format)
+                date_two = datetime.strptime(end_date, date_format)
+                days_diff = date_two - date_one
+                set_days_diff = days_diff.days # Converting only to dispaly days
+
+                cars = db.get_all_available_car_type(int(car_type))
+                for value in cars:
+                    value["price_per_km"] = value["price_per_km"] * set_days_diff
+                
+            if carid != 0:
+                print(carid)
+                print(start_date)
+                print(end_date)
+                print(pickup_time)
+                # db.insert_booking(session['id'], carid, start_date, end_date, pickup_time, 'booked', amount)
+
+
+
+                # # check the availability of the Car by getting the value of the selection in new_booking.html file
+                # cars = db.get_all_available_car_type(int(request.form.get('carType')))
+                # print(cars)
+                # if not cars:
+                #     flash("The car type that you have selected is currently NOT available")
+                #     return redirect(url_for('search'))
+                # elif cars:
+                #     # Create session data, we may access these data in booking routes for future booking
+                #     session['car_type'] = int(request.form.get('carType'))
+                #     session['start_Date'] = request.form.get('startDate')
+                #     session['end_Date'] = request.form.get('endDate')
+                #     session['pick_up_Time'] = request.form.get('pickupTime')
+                #     session['booking_status'] = 'booked'
+                #     session['car_id'] = 888  # don't know how to fetch a particular car_id from searching result
 
         # reload the new_booking page with showing the searching result
-        return render_template('new_booking.html', username=session['firstname'], cars=cars)
+        return render_template('new_booking.html', username=session['firstname'], carlist=cars)
 
     # Check if user has logged in ONLY
     elif 'loggedin' in session:
@@ -218,14 +251,21 @@ def carslist():
 # http://localhost:5000/carrental/bookinghistory - this will be the booking history page,
 # only accessible for logged in users
 @app.route('/carrental/bookinghistory')
-def bookinghistory():
+@app.route('/carrental/bookinghistory/<bookingid>')
+def bookinghistory(bookingid=0):
     # Check if user is loggedin
     if 'loggedin' in session:
         customerid = session['id']
 
         # check the booking history of logged in customer
         booking_history = db.get_customer_booking_history(customerid)
-        print(booking_history)
+        # print(booking_history)
+
+        # print(bookingid)
+        if bookingid != 0:
+            print(bookingid)
+            db.update_booking(bookingid)
+            booking_history = db.get_customer_booking_history(customerid)
 
         # Show the Cars List
         return render_template('booking_history.html', username=session['firstname'], history=booking_history)
@@ -238,23 +278,31 @@ def bookinghistory():
 
 # http://localhost:5000/carrental/cancelbooking - this will be the cancel booking page,
 # only accessible for logged in users
-@app.route('/carrental/bookinghistory/cancelbooking', methods=['GET', 'POST'])
-def cancel_booking():
-    # Check if user is logged in
-    if 'loggedin' in session:
-        customerid = session['id']
-        # update the booking status to 'cancel' and set car's status to 'Available'
-        db.update_booking(customerid)
+# @app.route('/carrental/bookinghistory/cancelbooking', methods=['GET', 'POST'])
+# def cancel_booking():
+#     # Check if user is logged in
+#     if 'loggedin' in session:
+#         customerid = session['id']
 
-        # check the booking history of logged in customer
-        booking_history = db.get_customer_booking_history(customerid)
-        print(booking_history)
+#         # check the booking history of logged in customer
+#         booking_history = db.get_customer_booking_history(customerid)
+#         print(booking_history)
 
-        flash("The booking is successfully cancelled!!!")
-        return render_template('booking_history.html', username=session['firstname'], history=booking_history)
+#         # Show the Cars List
+#         return render_template('booking_history.html', username=session['firstname'], history=booking_history)
+#         # customerid = session['id']
+#         # # update the booking status to 'cancel' and set car's status to 'Available'
+#         # db.update_booking(customerid)
 
-    # User is not logged in redirect to login page
-    return redirect(url_for('login'))
+#         # # check the booking history of logged in customer
+#         # booking_history = db.get_customer_booking_history(customerid)
+#         # print(booking_history)
+
+#         # flash("The booking is successfully cancelled!!!")
+#         # return render_template('booking_history.html', username=session['firstname'], history=booking_history)
+
+#     # User is not logged in redirect to login page
+#     return redirect(url_for('login'))
 
 
 if __name__ == "__main__":

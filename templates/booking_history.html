@@ -1,7 +1,7 @@
 {% extends 'layout.html' %} {% block title %}Booking History{% endblock %} {% block content %}
 <h2>Booking History Page</h2>
 {% for message in get_flashed_messages() %}
-    <p>{{ message }}</p>
+<p>{{ message }}</p>
 {% endfor %}
 <div>
     <p>Booking History:</p>
@@ -32,12 +32,12 @@
                 <td>{{ booking.booking_status }}</td>
                 <td>
                     {% if booking.booking_status == 'booked' %}
-                    <form action="{{ url_for('cancel_booking')}}" method="POST">
-                        <center><button type= "submit" class="btn btn-danger btn-sm">
+                    <center>
+                        <a href="{{ url_for('bookinghistory') }}/{{ booking.booking_id }}" class="btn btn-danger btn-sm">
                             Cancel Booking
-                        </button></center>
+                        </a>
+                    </center>
                     {% endif %}
-                    </form>
                 </td>
             </tr>
             {% endfor %}
