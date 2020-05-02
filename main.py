@@ -130,12 +130,13 @@ def profile():
 
 # http://localhost:5000/carrental/search - this will be the search page, only accessible for loggedin users
 @app.route('/carrental/search', methods=['GET', 'POST'])
-@app.route('/carrental/search/<carid>/<amount>', methods=['GET', 'POST'])
+@app.route('/carrental/search/<carid>/<amount>')
 def search(carid=0,amount=0):
 
     # Check if user is logged in and has filled the form
     if 'loggedin' in session:
         cars = []
+        search_arr = {}
         date_format = "%d-%m-%Y"
 
         if request.method == 'POST':
@@ -145,10 +146,10 @@ def search(carid=0,amount=0):
             pickup_time = request.form['pickupTime']
             
             if car_type:
-                # print(car_type)
-                # session['search']['start_date'] = request.form('startDate')
-                # session['search']['end_date'] = request.form.get('endDate')
-                # session['search']['pickup_time'] = request.form('pickupTime')
+                session['car_type'] = request.form['carType']
+                session['start_date'] = request.form['startDate']
+                session['end_date'] = request.form['endDate']
+                session['pickup_time'] = request.form['pickupTime']
 
                 date_one = datetime.strptime(start_date, date_format)
                 date_two = datetime.strptime(end_date, date_format)
@@ -158,15 +159,6 @@ def search(carid=0,amount=0):
                 cars = db.get_all_available_car_type(int(car_type))
                 for value in cars:
                     value["price_per_km"] = value["price_per_km"] * set_days_diff
-                
-            if carid != 0:
-                print(carid)
-                print(start_date)
-                print(end_date)
-                print(pickup_time)
-                # db.insert_booking(session['id'], carid, start_date, end_date, pickup_time, 'booked', amount)
-
-
 
                 # # check the availability of the Car by getting the value of the selection in new_booking.html file
                 # cars = db.get_all_available_car_type(int(request.form.get('carType')))
@@ -183,8 +175,24 @@ def search(carid=0,amount=0):
                 #     session['booking_status'] = 'booked'
                 #     session['car_id'] = 888  # don't know how to fetch a particular car_id from searching result
 
+        if carid != 0:
+            print(carid)
+            print(session['start_date'])
+            print(session['end_date'])
+            print(session['pickup_time'])
+            db.insert_booking(session['id'], carid, session['start_date'], session['end_date'], session['pickup_time'], 'booked', amount)
+            
+            # Removing search quesry from the session
+            session.pop('car_type', None)
+            session.pop('start_date', None)
+            session.pop('end_date', None)
+            session.pop('pickup_time', None)
+
+            return redirect(url_for('search'))
+
+
         # reload the new_booking page with showing the searching result
-        return render_template('new_booking.html', username=session['firstname'], carlist=cars)
+        return render_template('new_booking.html', username=session['firstname'], carlist=cars, search=search_arr)
 
     # Check if user has logged in ONLY
     elif 'loggedin' in session:
