@@ -139,6 +139,12 @@ def search(carid=0,amount=0):
         search_arr = {}
         date_format = "%d-%m-%Y"
 
+        # Removing search quesry from the session
+        session.pop('car_type', None)
+        session.pop('start_date', None)
+        session.pop('end_date', None)
+        session.pop('pickup_time', None)
+
         if request.method == 'POST':
             car_type = request.form['carType']
             start_date = request.form['startDate']
@@ -157,23 +163,12 @@ def search(carid=0,amount=0):
                 set_days_diff = days_diff.days # Converting only to dispaly days
 
                 cars = db.get_all_available_car_type(int(car_type))
-                for value in cars:
-                    value["price_per_km"] = value["price_per_km"] * set_days_diff
-
-                # # check the availability of the Car by getting the value of the selection in new_booking.html file
-                # cars = db.get_all_available_car_type(int(request.form.get('carType')))
-                # print(cars)
-                # if not cars:
-                #     flash("The car type that you have selected is currently NOT available")
-                #     return redirect(url_for('search'))
-                # elif cars:
-                #     # Create session data, we may access these data in booking routes for future booking
-                #     session['car_type'] = int(request.form.get('carType'))
-                #     session['start_Date'] = request.form.get('startDate')
-                #     session['end_Date'] = request.form.get('endDate')
-                #     session['pick_up_Time'] = request.form.get('pickupTime')
-                #     session['booking_status'] = 'booked'
-                #     session['car_id'] = 888  # don't know how to fetch a particular car_id from searching result
+                if not cars:
+                    flash("The car type that you have selected is currently NOT available")
+                    return redirect(url_for('search'))
+                elif cars:
+                    for value in cars:
+                        value["price_per_km"] = value["price_per_km"] * set_days_diff
 
         if carid != 0:
             print(carid)
@@ -206,34 +201,34 @@ def search(carid=0,amount=0):
 # --------------------------------------------BOOK THE CAR PAGE-----------------------------------------------------
 
 # http://localhost:5000/carrental/booking - this will be the booking page, only accessible for logged in users
-@app.route('/carrental/booking', methods=['GET', 'POST'])
-def booking():
-    # Check if user is logged in
-    if 'loggedin' in session:
-        session['booking_status'] = 'booked'
+# @app.route('/carrental/booking', methods=['GET', 'POST'])
+# def booking():
+#     # Check if user is logged in
+#     if 'loggedin' in session:
+#         session['booking_status'] = 'booked'
 
-        db.insert_booking(session['id'],
-                          session['car_id'],
-                          session['start_Date'],
-                          session['end_Date'],
-                          session['pick_up_Time'],
-                          session['booking_status'],
-                          123.00)
+#         db.insert_booking(session['id'],
+#                           session['car_id'],
+#                           session['start_Date'],
+#                           session['end_Date'],
+#                           session['pick_up_Time'],
+#                           session['booking_status'],
+#                           123.00)
 
-        # Remove session data after inserting a new booking
-        session.pop('id', None)
-        session.pop('car_id', None)
-        session.pop('start_Date', None)
-        session.pop('loggedin', None)
-        session.pop('end_Date', None)
-        session.pop('booking_status', None)
+#         # Remove session data after inserting a new booking
+#         session.pop('id', None)
+#         session.pop('car_id', None)
+#         session.pop('start_Date', None)
+#         session.pop('loggedin', None)
+#         session.pop('end_Date', None)
+#         session.pop('booking_status', None)
 
-        # User is logged in show them the home page
-        return render_template('booking.html', username=session['firstname'])
+#         # User is logged in show them the home page
+#         return render_template('booking.html', username=session['firstname'])
 
-    # User is not logged in and redirect to login page
-    else:
-        return redirect(url_for('login'))
+#     # User is not logged in and redirect to login page
+#     else:
+#         return redirect(url_for('login'))
 
 
 
