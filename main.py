@@ -53,9 +53,10 @@ def login():
 @app.route('/carrental/logout')
 def logout():
     # Remove session data, this will log the user out
-    session.pop('loggedin', None)
-    session.pop('id', None)
-    session.pop('username', None)
+    # session.pop('loggedin', None)
+    # session.pop('id', None)
+    # session.pop('username', None)
+    session.clear()
     # Redirect to the login page
     return redirect(url_for('login'))
 
@@ -78,7 +79,7 @@ def register():
         password = request.form['password']
 
         account = db.check_exist_username(email)
-        print(account)
+        
         # If account exists show error and validation checks
         if account:
             msg = 'Account has already existed!'
@@ -136,58 +137,88 @@ def search(carid=0,amount=0):
     # Check if user is logged in and has filled the form
     if 'loggedin' in session:
         cars = []
-        search_arr = {}
-        date_format = "%d-%m-%Y"
-
-        # Removing search quesry from the session
-        session.pop('car_type', None)
-        session.pop('start_date', None)
-        session.pop('end_date', None)
-        session.pop('pickup_time', None)
+        date_format = "%d-%m-%Y %H:%M"
 
         if request.method == 'POST':
             car_type = request.form['carType']
-            start_date = request.form['startDate']
-            end_date = request.form['endDate']
+            car_colour = request.form['carColor']
+            car_seat = request.form['carSeat']
+            pickup_date = request.form['pickupDate']
             pickup_time = request.form['pickupTime']
+            return_date = request.form['returnDate']
+            return_time = request.form['returnTime']
             
             if car_type:
                 session['car_type'] = request.form['carType']
-                session['start_date'] = request.form['startDate']
-                session['end_date'] = request.form['endDate']
+                session['car_colour'] = request.form['carColor']
+                session['car_seat'] = request.form['carSeat']
+                session['pickup_date'] = request.form['pickupDate']
                 session['pickup_time'] = request.form['pickupTime']
+                session['return_date'] = request.form['returnDate']
+                session['return_time'] = request.form['returnTime']
 
-                date_one = datetime.strptime(start_date, date_format)
-                date_two = datetime.strptime(end_date, date_format)
+                date_one = datetime.strptime(pickup_date +' '+ pickup_time, date_format)
+                date_two = datetime.strptime(return_date +' '+ return_time, date_format)
                 days_diff = date_two - date_one
+                get_hours = days_diff.total_seconds() / 60 ** 2
                 set_days_diff = days_diff.days # Converting only to dispaly days
 
-                cars = db.get_all_available_car_type(int(car_type))
-                if not cars:
-                    flash("The car type that you have selected is currently NOT available")
-                    return redirect(url_for('search'))
-                elif cars:
-                    for value in cars:
-                        value["price_per_km"] = value["price_per_km"] * set_days_diff
+                # Setting Renting Time Length
+                session['renting_length'] = "Your renting time period is: " + str(days_diff) + " hours"
+
+                conflict = db.check_booking_dates_conflict(str(pickup_date), str(return_date))
+                print(conflict)
+                if conflict['count'] > 0:
+                    flash("No cars available for your selected date range, Sorry!")
+                    # return redirect(url_for('search'))
+                else:
+                    cars = db.get_all_available_car_type(int(car_type))
+                    # print(cars)
+                    if not cars:
+                        flash("No cars available for your search range, Sorry!")
+                        return redirect(url_for('search'))
+                    elif cars:
+                        for value in cars:
+                            # value["price_per_hour"] = value["price_per_hour"] * int(get_hours)
+                            value["price_total"] = float(value["price_per_hour"]) * float(get_hours)
+                        
+        # else:
+        #     # Removing search quesry from the session
+        #     session.pop('car_type', None)
+        #     session.pop('car_colour', None)
+        #     session.pop('car_seat', None)
+        #     session.pop('pickup_date', None)
+        #     session.pop('pickup_time', None)
+        #     session.pop('return_date', None)
+        #     session.pop('return_time', None)
+        #     session.pop('renting_length', None)
+            
 
         if carid != 0:
-            print(carid)
-            print(session['start_date'])
-            print(session['end_date'])
-            print(session['pickup_time'])
-            db.insert_booking(session['id'], carid, session['start_date'], session['end_date'], session['pickup_time'], 'booked', amount)
+            # Need changes in the order
+            db.insert_booking(session['id'], carid, session['pickup_date'], session['return_date'], session['pickup_time'], 'booked', amount)
             
             # Removing search quesry from the session
             session.pop('car_type', None)
-            session.pop('start_date', None)
-            session.pop('end_date', None)
+            session.pop('pickup_date', None)
             session.pop('pickup_time', None)
+            session.pop('return_date', None)
 
-            return redirect(url_for('search'))
+            return redirect(url_for('bookinghistory'))
 
+        if request.method != 'POST' and carid == 0:
+            # Removing search quesry from the session
+            session.pop('car_type', None)
+            session.pop('car_colour', None)
+            session.pop('car_seat', None)
+            session.pop('pickup_date', None)
+            session.pop('pickup_time', None)
+            session.pop('return_date', None)
+            session.pop('return_time', None)
+            session.pop('renting_length', None)
 
         # reload the new_booking page with showing the searching result
-        return render_template('new_booking.html', username=session['firstname'], carlist=cars, search=search_arr)
+        return render_template('new_booking.html', username=session['firstname'], carlist=cars)
 
     # Check if user has logged in ONLY
     elif 'loggedin' in session:
@@ -235,18 +266,18 @@ def search(carid=0,amount=0):
 # --------------------------------------------CAR LIST PAGE-----------------------------------------------------
 
 # http://localhost:5000/carrental/carslist - this will be the Cars List page, only accessible for logged in users
-@app.route('/carrental/carslist')
-def carslist():
-    # Check if user is logged in
-    if 'loggedin' in session:
-        # get and show the list of all available cars
-        carlist = db.get_all_available_cars()
+# @app.route('/carrental/carslist')
+# def carslist():
+#     # Check if user is logged in
+#     if 'loggedin' in session:
+#         # get and show the list of all available cars
+#         carlist = db.get_all_available_cars()
 
-        # Show the Cars List
-        return render_template('cars.html', username=session['firstname'], cars=carlist)
+#         # Show the Cars List
+#         return render_template('cars.html', username=session['firstname'], cars=carlist)
 
-    # User is not logged in redirect to login page
-    return redirect(url_for('login'))
+#     # User is not logged in redirect to login page
+#     return redirect(url_for('login'))
 
 
 # --------------------------------------------BOOKING HISTORY PAGE-----------------------------------------------------
@@ -262,11 +293,8 @@ def bookinghistory(bookingid=0):
 
         # check the booking history of logged in customer
         booking_history = db.get_customer_booking_history(customerid)
-        # print(booking_history)
 
-        # print(bookingid)
         if bookingid != 0:
-            print(bookingid)
             db.update_booking(bookingid)
             booking_history = db.get_customer_booking_history(customerid)
 
@@ -289,7 +317,6 @@ def bookinghistory(bookingid=0):
 
 #         # check the booking history of logged in customer
 #         booking_history = db.get_customer_booking_history(customerid)
-#         print(booking_history)
 
 #         # Show the Cars List
 #         return render_template('booking_history.html', username=session['firstname'], history=booking_history)
@@ -299,7 +326,6 @@ def bookinghistory(bookingid=0):
 
 #         # # check the booking history of logged in customer
 #         # booking_history = db.get_customer_booking_history(customerid)
-#         # print(booking_history)
 
 #         # flash("The booking is successfully cancelled!!!")
 #         # return render_template('booking_history.html', username=session['firstname'], history=booking_history)

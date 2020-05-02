@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from datetime import datetime
 import pymysql  # MySQLdb  # pymysql
 
 
@@ -46,39 +47,35 @@ class DatabaseUtils:
             cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'John', 'Mathew', 'john@gmail.com', '123');")
             cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Anna', 'Williams', 'anna@gmail.com', '123');")
             cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Harry', 'Robert', 'harry@gmail.com', '123');")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Charlie', 'William', 'carlie@gmail.com', "
-                           "'123');")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Oliver', 'Michelle', 'oliver@gmail.com', "
-                           "'123');")
+            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Charlie', 'William', 'carlie@gmail.com', '123');")
+            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Oliver', 'Michelle', 'oliver@gmail.com', '123');")
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS `cars_list` (
                     `car_id` int(15) NOT NULL AUTO_INCREMENT,
                     `make_name` varchar(100) NOT NULL,
                     `model_name` varchar(100) DEFAULT NULL,
-                    `registration_no` varchar(10) DEFAULT NULL,
                     `seating_capacity` varchar(1) DEFAULT NULL,
+                    `colour` varchar(20) DEFAULT NULL,
                     `car_type` int(1) DEFAULT NULL COMMENT '1:Sedan | 2:Hatch | 3:SUV',
-                    `price_per_km` decimal(10,2) NOT NULL,
+                    `price_per_hour` decimal(10,2) NOT NULL,
+                    `registration_no` varchar(10) DEFAULT NULL,
                     `status` varchar(15) NOT NULL,
                     UNIQUE(`registration_no`),
                     PRIMARY KEY (`car_id`)                    
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
             """)
-            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Toyota', 'Camry', '1AB 2CD', '4', 1, '15', "
-                           "'available');")
-            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Mazda', 'CX-5', '2YM 5CD', '4', 3, '20', "
-                           "'available');")
-            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Nissan', 'Altima', '5GH 3XC', '4', 1, '10', "
-                           "'available');")
+            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Toyota', 'Camry', '4', 'Red', 1, 15, '1AB 2CD', 'available');")
+            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Mazda', 'CX-5', '4', 'Yellow', 3, 20, '2YM 5CD', 'available');")
+            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Nissan', 'Altima', '5', 'Black', 1, 10, '5GH 3XC', 'available');")
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS `bookings` (
                     `booking_id` int(11) NOT NULL AUTO_INCREMENT,
                     `customer_id` int(11) NOT NULL,
                     `car_id` int(11) NOT NULL,
-                    `start_date` varchar(30) NOT NULL,
-                    `end_date` varchar(30) NOT NULL,
+                    `start_date` DATE NOT NULL,
+                    `end_date` DATE NOT NULL,
                     `pickup_time` varchar(30) NOT NULL,
                     `booking_amount` decimal(10,2) NOT NULL,
                     `booking_status` varchar(30) NOT NULL,
@@ -137,18 +134,55 @@ class DatabaseUtils:
 
         return cursor.fetchall()
 
-    def get_all_available_car_type(self, car_type):
-        print(type(car_type))
+    def check_booking_dates_conflict(self, pickup_date, return_date):
+        print(pickup_date)
+        print(return_date)
+
+        conflicts_arr = {}
+
+        pickup_oldformat = pickup_date
+        pickup_datetimeobject = datetime.strptime(pickup_oldformat,'%d-%m-%Y')
+        pickup_newformat = pickup_datetimeobject.strftime('%Y-%m-%d')
+
+        return_oldformat = return_date
+        return_datetimeobject = datetime.strptime(return_oldformat,'%d-%m-%Y')
+        return_newformat = return_datetimeobject.strftime('%Y-%m-%d')
+
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT * FROM cars_list WHERE status = 'available' and car_type = %s", car_type)
+        cursor.execute("SELECT car_id FROM bookings WHERE (%s <= end_date AND %s >= start_date) OR (%s <= end_date AND %s >= start_date)", (pickup_newformat, return_newformat, pickup_newformat, return_newformat))
+        count = cursor.rowcount
+
+        if count > 0:
+            conflicts_arr['count'] = count
+            conflicts_arr['cars'] = cursor.fetchall()
+        else:
+            conflicts_arr['count'] = count
+            conflicts_arr['cars'] = ''
+        # print(count)
+        # cursor.execute("SELECT * FROM bookings WHERE (%s <= end_date AND %s >= start_date) OR (%s <= end_date AND %s >= start_date)", (pickup_newformat, return_newformat, pickup_newformat, return_newformat))
+
+        return conflicts_arr
+
+    def get_all_available_car_type(self, car_type):
+        cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+        # cursor.execute("SELECT * FROM cars_list WHERE status = 'available' AND car_type = %s", car_type)
+        cursor.execute("SELECT * FROM cars_list WHERE status = 'available' AND car_type = %s", car_type)
 
         return cursor.fetchall()
 
-    def insert_booking(self, customer_id, car_id, startDate, endDate, _time, booking_status, booking_amount):
+    def insert_booking(self, customer_id, car_id, pickupDate, returnDate, _time, booking_status, booking_amount):
         with self.connection.cursor() as cursor:
+            pickup_oldformat = pickupDate
+            pickup_datetimeobject = datetime.strptime(pickup_oldformat,'%d-%m-%Y')
+            pickup_newformat = pickup_datetimeobject.strftime('%Y-%m-%d')
+
+            return_oldformat = returnDate
+            return_datetimeobject = datetime.strptime(return_oldformat,'%d-%m-%Y')
+            return_newformat = return_datetimeobject.strftime('%Y-%m-%d')
+
             cursor.execute("INSERT INTO bookings (customer_id, car_id, start_date, end_date, pickup_time, "
                            "booking_status, booking_amount) VALUES (%s,%s,%s,%s,%s,%s,%s)",
-                           (customer_id, car_id, startDate, endDate, _time, booking_status, booking_amount))
+                           (customer_id, car_id, pickup_newformat, return_newformat, _time, booking_status, booking_amount))
         self.connection.commit()
 
     # Can you simplify the queries here ??????????????????????????????????????
