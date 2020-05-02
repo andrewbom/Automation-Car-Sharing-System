@@ -86,10 +86,10 @@ class DatabaseUtils:
                     PRIMARY KEY (`booking_id`)                  
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
             """)
-            # cursor.execute("INSERT IGNORE INTO `bookings` VALUES (NULL, 1, 1, '07-04-2020', '10-04-2020', '13:45', "
-            #                "'155.00', 'booked', NULL);")
-            # cursor.execute("INSERT IGNORE INTO `bookings` VALUES (NULL, 1, 2, '10-03-2020', '15-03-2020', '13:45', "
-            #                "'123.00', 'booked', NULL);")
+            cursor.execute("INSERT IGNORE INTO `bookings` VALUES (NULL, 1, 1, '07-04-2020', '10-04-2020', '13:45', "
+                           "'155.00', 'booked', NULL);")
+            cursor.execute("INSERT IGNORE INTO `bookings` VALUES (NULL, 1, 2, '10-03-2020', '15-03-2020', '13:45', "
+                           "'123.00', 'booked', NULL);")
 
         self.connection.commit()
 
