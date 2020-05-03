@@ -14,10 +14,10 @@
                             <div class="col-6">
                                 <label>Make</label>
                                 <select name="carMake" class="form-control">
-                                    <option value="0">Any</option>
-                                    <option value="1">Toyota</option>
-                                    <option value="2">Nissan</option>
-                                    <option value="3">Mitsubishi</option>
+                                    <option value="0" >Any</option>
+                                    <option value="Toyota"{% if session['car_make'] == 'Toyota' %} selected="selected" {% endif %}>Toyota</option>
+                                    <option value="Nissan"{% if session['car_make'] == 'Nissan' %} selected="selected" {% endif %}>Nissan</option>
+                                    <option value="Mitsubishi"{% if session['car_make'] == 'Mitsubishi' %} selected="selected" {% endif %}>Mitsubishi</option>
                                 </select>
                             </div>
                             <div class="col-6">
@@ -64,7 +64,7 @@
                                 <label>Pick-up Date & Time:</label>
                             </div>
                             <div class="col-7">
-                                <input type="text" class="form-control" name="pickupDate" value="{{ session['pickup_date'] }}" placeholder="DD-MM-YYYY">
+                                <input type="text" class="form-control" name="pickupDate" value="{{ session['pickup_date'] }}" placeholder="DD-MM-YYYY" required="required">
                             </div>
                             <div class="col-5">
                                 <select name="pickupTime" class="form-control">
@@ -126,7 +126,7 @@
                                 <label>Return Date & Time:</label>
                             </div>
                             <div class="col-7">
-                                <input type="text" class="form-control" name="returnDate" value="{{ session['return_date'] }}" placeholder="DD-MM-YYYY">
+                                <input type="text" class="form-control" name="returnDate" value="{{ session['return_date'] }}" placeholder="DD-MM-YYYY" required="required">
                             </div>
                             <div class="col-5">
                                 <select name="returnTime" class="form-control">

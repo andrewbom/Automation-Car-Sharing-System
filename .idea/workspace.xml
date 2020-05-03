@@ -5,13 +5,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/booking.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/booking.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/booking_history.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/booking_history.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cars.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cars.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layout.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/new_booking.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/new_booking.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +28,8 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/templates" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -82,30 +78,34 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="939" height="180" key="GridCell.Tab.0.bottom" timestamp="1588373950584">
+    <state width="939" height="180" key="GridCell.Tab.0.bottom" timestamp="1588507806963">
       <screen x="0" y="23" width="1920" height="1032" />
     </state>
     <state width="939" height="281" key="GridCell.Tab.0.bottom/0.23.1440.877/1440.23.1920.1032@1440.23.1920.1032" timestamp="1588136087777" />
-    <state width="939" height="180" key="GridCell.Tab.0.bottom/0.23.1920.1032@0.23.1920.1032" timestamp="1588373950584" />
-    <state width="939" height="180" key="GridCell.Tab.0.center" timestamp="1588373950583">
+    <state width="939" height="180" key="GridCell.Tab.0.bottom/0.23.1920.1032@0.23.1920.1032" timestamp="1588507806963" />
+    <state width="939" height="180" key="GridCell.Tab.0.center" timestamp="1588507806962">
       <screen x="0" y="23" width="1920" height="1032" />
     </state>
     <state width="939" height="281" key="GridCell.Tab.0.center/0.23.1440.877/1440.23.1920.1032@1440.23.1920.1032" timestamp="1588136087775" />
-    <state width="939" height="180" key="GridCell.Tab.0.center/0.23.1920.1032@0.23.1920.1032" timestamp="1588373950583" />
-    <state width="939" height="180" key="GridCell.Tab.0.left" timestamp="1588373950583">
+    <state width="939" height="180" key="GridCell.Tab.0.center/0.23.1920.1032@0.23.1920.1032" timestamp="1588507806962" />
+    <state width="939" height="180" key="GridCell.Tab.0.left" timestamp="1588507806961">
       <screen x="0" y="23" width="1920" height="1032" />
     </state>
     <state width="939" height="281" key="GridCell.Tab.0.left/0.23.1440.877/1440.23.1920.1032@1440.23.1920.1032" timestamp="1588136087774" />
-    <state width="939" height="180" key="GridCell.Tab.0.left/0.23.1920.1032@0.23.1920.1032" timestamp="1588373950583" />
-    <state width="939" height="180" key="GridCell.Tab.0.right" timestamp="1588373950583">
+    <state width="939" height="180" key="GridCell.Tab.0.left/0.23.1920.1032@0.23.1920.1032" timestamp="1588507806961" />
+    <state width="939" height="180" key="GridCell.Tab.0.right" timestamp="1588507806962">
       <screen x="0" y="23" width="1920" height="1032" />
     </state>
     <state width="939" height="281" key="GridCell.Tab.0.right/0.23.1440.877/1440.23.1920.1032@1440.23.1920.1032" timestamp="1588136087776" />
-    <state width="939" height="180" key="GridCell.Tab.0.right/0.23.1920.1032@0.23.1920.1032" timestamp="1588373950583" />
+    <state width="939" height="180" key="GridCell.Tab.0.right/0.23.1920.1032@0.23.1920.1032" timestamp="1588507806962" />
     <state x="0" y="248" key="RollbackChangesDialog" timestamp="1588365343487">
       <screen x="0" y="23" width="1920" height="1032" />
     </state>
     <state x="0" y="248" key="RollbackChangesDialog/0.23.1920.1032@0.23.1920.1032" timestamp="1588365343487" />
+    <state x="469" y="178" key="SettingsEditor" timestamp="1588506196372">
+      <screen x="0" y="23" width="1920" height="1032" />
+    </state>
+    <state x="469" y="178" key="SettingsEditor/0.23.1920.1032@0.23.1920.1032" timestamp="1588506196372" />
     <state x="0" y="243" key="VCS.ChangeListViewerDialog" timestamp="1588332768131">
       <screen x="0" y="23" width="1920" height="1032" />
     </state>

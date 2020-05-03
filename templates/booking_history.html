@@ -10,9 +10,10 @@
             <tr>
                 <th>Booking ID</th>
                 <th>Car</th>
-                <th>Start Date</th>
-                <th>End Date</th>
+                <th>Pickup Date</th>
                 <th>Pickup Time</th>
+                <th>Return Date</th>
+                <th>Return Time</th>
                 <th>Booked By</th>
                 <th>Booking Amount</th>
                 <th>Status</th>
@@ -24,9 +25,10 @@
             <tr>
                 <td>{{ booking.booking_id }}</td>
                 <td>{{ booking.make_name }} {{ booking.model_name }}</td>
-                <td>{{ booking.start_date }}</td>
-                <td>{{ booking.end_date }}</td>
+                <td>{{ booking.pickup_date }}</td>
                 <td>{{ booking.pickup_time }}</td>
+                <td>{{ booking.return_date }}</td>
+                <td>{{ booking.return_time }}</td>
                 <td>{{ booking.first_name }} {{ booking.last_name }}</td>
                 <td>${{ booking.booking_amount }}</td>
                 <td>{{ booking.booking_status }}</td>
