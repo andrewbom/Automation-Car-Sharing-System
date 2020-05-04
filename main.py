@@ -171,28 +171,29 @@ def search(carid=0, amount=0):
 
                 conflict = db.check_booking_dates_conflict(str(pickup_date), str(return_date))
                 print(conflict)
-                if conflict['count'] > 0:
-                    flash("No cars available for your selected date range, Sorry!")
-                    # return redirect(url_for('search'))
-                    cars = db.get_all_available_car_type(int(car_type))
 
-                    # print(cars)
+                # check whether the car has been booked within the input time period
+                # if yes, conflict['count'] will be greater than 0
+                if conflict['count'] > 0:
+
+                    # get the car by filtering out those booked car within that input period
+                    cars = db.get_all_available_car_type(int(car_type), str(pickup_date), str(return_date))
+
                     if not cars:
                         flash("No cars available for your search range, Sorry!")
                         return redirect(url_for('search'))
                     elif cars:
                         for value in cars:
-                            # value["price_per_hour"] = value["price_per_hour"] * int(get_hours)
                             value["price_total"] = float(value["price_per_hour"]) * float(get_hours)
+
+                # if there is no conflict
                 else:
-                    cars = db.get_all_available_car_type(int(car_type))
-                    # print(cars)
+                    cars = db.get_all_available_car_type(int(car_type), str(pickup_date), str(return_date))
                     if not cars:
                         flash("No cars available for your search range, Sorry!")
                         return redirect(url_for('search'))
                     elif cars:
                         for value in cars:
-                            # value["price_per_hour"] = value["price_per_hour"] * int(get_hours)
                             value["price_total"] = float(value["price_per_hour"]) * float(get_hours)
 
         # this if statement happens when user decides to book a car from the search result after the searching process
