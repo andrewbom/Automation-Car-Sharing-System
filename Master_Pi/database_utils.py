@@ -6,9 +6,9 @@ import pymysql  # MySQLdb  # pymysql
 class DatabaseUtils:
     app = Flask(__name__)
 
-    HOST = "35.201.23.126"  # google cloud IP address
-    USER = "root"  # google cloud sql user name
-    PASSWORD = "andrewishandsome"  # google cloud sql password
+    HOST = ""  # google cloud IP address
+    USER = ""  # google cloud sql user name
+    PASSWORD = ""  # google cloud sql password
     DATABASE = "Pythonlogin"
 
     def __init__(self, connection=None):
