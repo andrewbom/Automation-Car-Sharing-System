@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dced9c8c-958f-46e2-b75d-1654241b66db" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/database_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Master_Pi/database_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Master_Pi/database_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Master_Pi/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Master_Pi/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +31,7 @@
     <option name="showMembers" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -102,6 +105,9 @@
       <updated>1588070376793</updated>
     </task>
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="740" y="123" key="CommitChangelistDialog2" timestamp="1588941546444">
