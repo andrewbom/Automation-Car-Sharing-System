@@ -28,9 +28,9 @@ class DatabaseUtils:
 
     def create_account_table(self):
         with self.connection.cursor() as cursor:
-            cursor.execute("DROP TABLE customers;")
-            cursor.execute("DROP TABLE cars_list;")
-            cursor.execute("DROP TABLE bookings;")
+            cursor.execute("DROP TABLE IF EXISTS customers")
+            cursor.execute("DROP TABLE IF EXISTS cars_list")
+            cursor.execute("DROP TABLE IF EXISTS bookings")
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS `customers` (
@@ -50,6 +50,8 @@ class DatabaseUtils:
             cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Charlie', 'William', 'carlie@gmail.com', "
                            "'123');")
             cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Oliver', 'Michelle', 'oliver@gmail.com', "
+                           "'123');")
+            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Wayne', 'Wayne', 'abc@gmail.com', "
                            "'123');")
 
             cursor.execute("""
@@ -238,3 +240,16 @@ class DatabaseUtils:
                        "WHERE booking_id = %s",
                        bookingid)
         self.connection.commit()
+
+    def validate_collection(self, customer_id, car_id):
+        booking_status = "booked"
+        cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("Select * "
+                       "from bookings "
+                       "where "
+                       "customer_id = %s "
+                       "AND car_id = %s "
+                       "AND booking_status =  %s",
+                       (customer_id, car_id, booking_status))
+
+        return cursor.fetchone()
