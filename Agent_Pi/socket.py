@@ -22,6 +22,7 @@ def receive(socket, signal):
 # host = input("Host:localhost")
 # port = int(input("Port:8080"))
 
+
 # Attempt connection to server
 try:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
