@@ -6,9 +6,9 @@ import pymysql  # MySQLdb  # pymysql
 class DatabaseUtils:
     app = Flask(__name__)
 
-    HOST = "35.201.23.126"  # google cloud IP address
+    HOST = ""  # google cloud IP address
     USER = "root"  # google cloud sql user name
-    PASSWORD = "andrewishandsome"  # google cloud sql password
+    PASSWORD = "123456789"  # google cloud sql password
     DATABASE = "Pythonlogin"
 
     def __init__(self, connection=None):
@@ -215,7 +215,6 @@ class DatabaseUtils:
     #     # cursor.execute("SELECT * FROM cars_list WHERE variable_name", str(avoid_lis))
     #
     #     return cursor.fetchall()
-    
 
     def insert_booking(self, customer_id, car_id, pickupDate, piuckup_time, returnDate, return_time, booking_status,
                        booking_amount):
