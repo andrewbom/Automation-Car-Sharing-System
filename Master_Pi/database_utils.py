@@ -6,10 +6,10 @@ import pymysql  # MySQLdb  # pymysql
 class DatabaseUtils:
     app = Flask(__name__)
 
-    HOST = ""  # google cloud IP address
-    USER = "root"  # google cloud sql user name
-    PASSWORD = "123456789"  # google cloud sql password
-    DATABASE = "Pythonlogin"
+    HOST = "34.67.112.8"  # google cloud IP address
+    USER = "wayne"  # google cloud sql user name
+    PASSWORD = "Wayne94@"  # google cloud sql password
+    DATABASE ="Projectdb"
 
     def __init__(self, connection=None):
         if connection is None:
@@ -240,8 +240,8 @@ class DatabaseUtils:
                        "WHERE booking_id = %s",
                        bookingid)
         self.connection.commit()
-
-    def validate_collection(self, customer_id, car_id):
+    
+    def validate_collection(self, customer_id ,car_id):
         booking_status = "booked"
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
         cursor.execute("Select * "
@@ -250,6 +250,8 @@ class DatabaseUtils:
                        "customer_id = %s "
                        "AND car_id = %s "
                        "AND booking_status =  %s",
-                       (customer_id, car_id, booking_status))
+                       (customer_id, car_id,booking_status))
 
         return cursor.fetchone()
+
+        

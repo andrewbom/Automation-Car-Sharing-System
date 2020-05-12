@@ -3,12 +3,11 @@ from database_utils import DatabaseUtils
 from datetime import datetime
 import re
 from server import ServerClass
-
+ 
 app = Flask(__name__)
 app.secret_key = 'secret'
 db = DatabaseUtils()
 db.create_account_table()
-
 
 # --------------------------------------------LOGIN PAGE-----------------------------------------------------
 
@@ -113,7 +112,7 @@ def home():
 # --------------------------------------------PROFILE PAGE-----------------------------------------------------
 
 # http://localhost:5000/pythinlogin/profile - this will be the profile page, only accessible for logged in users
-@app.route('/carrental/profile')
+@app.route('/pythonlogin/profile')
 def profile():
     # Check if user is logged in
     if 'loggedin' in session:
@@ -132,6 +131,7 @@ def profile():
 @app.route('/carrental/search', methods=['GET', 'POST'])
 @app.route('/carrental/search/<carid>/<amount>')
 def search(carid=0, amount=0):
+
     # Check if user is logged in and has filled the form
     if 'loggedin' in session:
         cars = []
@@ -199,8 +199,7 @@ def search(carid=0, amount=0):
         # this if statement happens when user decides to book a car from the search result after the searching process
         if carid != 0:
             # Need changes in the order
-            db.insert_booking(session['id'], carid, session['pickup_date'], session['pickup_time'],
-                              session['return_date'], session['return_time'], 'booked', amount)
+            db.insert_booking(session['id'], carid, session['pickup_date'], session['pickup_time'], session['return_date'], session['return_time'], 'booked', amount)
 
             # Removing search query from the session
             session.pop('car_make', None)
@@ -261,6 +260,7 @@ def bookinghistory(bookingid=0):
 
 
 if __name__ == "__main__":
-    sv = ServerClass()
-    sv.Serve()
-    app.run(debug=False)
+   sv = ServerClass()
+   sv.Serve()
+   app.run(debug=False)
+    
