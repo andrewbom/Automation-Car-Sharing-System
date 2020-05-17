@@ -4,7 +4,6 @@ import sys
 import datetime
 from getpass import getpass
 
-
 # Wait for incoming data from server
 # .decode is used to turn the message in bytes to a string
 def receive(socket, signal):
