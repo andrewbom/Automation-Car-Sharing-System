@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime
 import pymysql  # MySQLdb  # pymysql
 
-
 class DatabaseUtils:
     app = Flask(__name__)
 
