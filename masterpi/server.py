@@ -11,6 +11,7 @@ except ImportError:
 # Variables for holding information about connections
 connections = []
 total_connections = 0
+db = DatabaseUtils()
 
 
 class ServerClass:
@@ -36,56 +37,70 @@ class ServerClass:
         # .decode is used to convert the byte data into a printable string
 
         def run(self):
+            # if there is a signal, run the following coding
             while self.signal:
                 try:
+                    # receiving the data from agent_pi
                     data = self.socket.recv(120)
                 except:
+                    # show the message that signal is disconnected
                     print("Client " + str(self.address) + " has disconnected")
                     self.signal = False
                     connections.remove(self)
                     break
 
-                db = DatabaseUtils()
-                if data != " ":
+                if data:
                     try:
-                        newdata = json.loads(data)
+                        new_data = json.loads(data)
                         print("ID " + str(self.id) + ": " + str(data.decode("utf-8")))
-                        # date = newdata["date"]
-                        data_type = newdata["type"]
+                        # date = new_data["date"]
+                        data_type = new_data["type"]
 
+                        # check if the data type is credentials
                         if data_type == "credentials":
-                            username = newdata["username"]
-                            password = newdata["password"]
-                            customer_id = newdata["customer_id"]
-                            car_id = newdata["car_id"]
 
-                            userdata = db.login_account(username, password)
-                            if userdata is not None:
+                            # assigning the variables to the user account information that entered in the agent_pi
+                            username = new_data["username"]
+                            password = new_data["password"]
+                            customer_id = new_data["customer_id"]
+                            car_id = new_data["car_id"]
+
+                            # checking whether the user account information of agent pi match that on cloud database
+                            user_data = db.login_account(username, password)
+
+                            # if the account information match that on cloud database
+                            if user_data is not None:
+                                # validate whether the user has booked the car
                                 verify = db.validate_collection(customer_id, car_id)
+
+                                # if verify successfully
                                 if verify is not None:
-                                    booking_id = verify["booking_id"]
                                     for client in connections:
                                         if client.id == self.id:
-                                            client.socket.send(str.encode("unlocking accepted"))
-                                            booking_status = "collected"
-                                            db.update_booking(booking_id, booking_status)
+                                            client.socket.send(str.encode("Unlocking Accepted"))
+                                            booking_status = "Collected"
+                                            db.update_booking(verify["booking_id"], booking_status)
 
+                                # if verify failed
                                 else:
                                     for client in connections:
                                         if client.id == self.id:
-                                            client.socket.send(str.encode("unlocking denied"))
+                                            client.socket.send(str.encode("Unlocking Denied"))
 
+                            # if the account information DOES NOT match that on cloud database
                             else:
                                 for client in connections:
                                     if client.id == self.id:
-                                        client.socket.send(str.encode("unlocking denied"))
+                                        client.socket.send(str.encode("Your account or password is wrong! Please try again."))
 
+                        # check if the data type is location
                         elif data_type == "location":
-                            car_id = newdata["car_id"]
-                            longitude = newdata["longitude"]
-                            latitude = newdata["latitude"]
+                            car_id = new_data["car_id"]
+                            longitude = new_data["longitude"]
+                            latitude = new_data["latitude"]
                             db.update_car_location(car_id, latitude, longitude)
 
+                    # if the received data from agent_pi cannot loaded properly
                     except:
                         pass
 

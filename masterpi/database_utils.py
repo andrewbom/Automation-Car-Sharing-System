@@ -91,9 +91,9 @@ class DatabaseUtils:
                     PRIMARY KEY (`booking_id`)                  
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
             """)
-            cursor.execute(
-                "INSERT IGNORE INTO `bookings` VALUES (NULL,1, 1, '2020-04-07', '13:45', '2020-04-10', '14:45', "
-                "'155.00', 'booked' ,NULL);")
+            # cursor.execute(
+            #     "INSERT IGNORE INTO `bookings` VALUES (NULL,1, 1, '2020-04-07', '13:45', '2020-04-10', '14:45', "
+            #     "'155.00', 'booked' ,NULL);")
             # cursor.execute("INSERT IGNORE INTO `bookings` VALUES (NULL, 1, 2, '10-03-2020', '15-03-2020', '13:45', "
             #                "'123.00', 'booked', NULL);")
 
@@ -243,6 +243,7 @@ class DatabaseUtils:
 
         self.connection.commit()
 
+    # validate whether the user has booked the car and fetch that information
     def validate_collection(self, customer_id, car_id):
         booking_status = "booked"
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)

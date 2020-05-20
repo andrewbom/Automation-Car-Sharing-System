@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/IOT_Assignment_2.iml" filepath="$PROJECT_DIR$/.idea/IOT_Assignment_2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../agentpi_update/.idea/agentpi_update.iml" filepath="$PROJECT_DIR$/../../agentpi_update/.idea/agentpi_update.iml" />
     </modules>
   </component>
 </project>

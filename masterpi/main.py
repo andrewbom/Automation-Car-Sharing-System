@@ -291,8 +291,9 @@ def map_bounded():
             "lng": float(item["lng"])} for item in cars]
 
         location_data = json.dumps(location_detail)
-
         print(location_data)
+
+        # initialize the google map page
         carsmap = Map(
             identifier="carsmap",
             lat=-37.8047,
