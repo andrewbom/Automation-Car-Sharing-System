@@ -16,7 +16,6 @@ def receive(socket, signal):
             signal = False
             break
 
-
 # Get host and port
 # host = input("Host:localhost")
 # port = int(input("Port:8080"))
