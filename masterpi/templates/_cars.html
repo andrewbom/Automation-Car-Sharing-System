@@ -1,0 +1,32 @@
+{% extends 'layout.html' %} {% block title %}Cars{% endblock %} {% block content %}
+<h2>Cars Page</h2>
+<div>
+    <p>List of Available Cars:</p>
+    <table class="table thead-dark table-bordered">
+        <thead>
+            <tr>
+                <th>Make/Model</th>
+                <th>Type</th>
+                <th>Seating</th>
+                <th>Price (Per Km)</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for car in cars %}
+            <tr>
+                <td>{{ car.make_name }} {{ car.model_name }}</td>
+                <td>{{ car.car_type }}</td>
+                <td>{{ car.seating_capacity }}</td>
+                <td>${{ car.price_per_km }}</td>
+                <td>{{ car.status }}</td>
+                <td>
+                    <center><button class="btn btn-success btn-sm">Book Now</button></center>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

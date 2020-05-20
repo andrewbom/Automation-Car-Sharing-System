@@ -1,0 +1,248 @@
+{% extends 'layout.html' %} {% block title %}New Booking{% endblock %} {% block content %}
+<h2>New Booking Page</h2>
+{% for message in get_flashed_messages() %}
+<p>{{ message }}</p>
+{% endfor %}
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <!-- {% print(session) %} -->
+                <form action="{{url_for('search')}}" method="POST" class="form-horizontal">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Make</label>
+                                <select name="carMake" class="form-control">
+                                    <option value="0" >Any</option>
+                                    <option value="Toyota"{% if session['car_make'] == 'Toyota' %} selected="selected" {% endif %}>Toyota</option>
+                                    <option value="Nissan"{% if session['car_make'] == 'Nissan' %} selected="selected" {% endif %}>Nissan</option>
+                                    <option value="Mitsubishi"{% if session['car_make'] == 'Mitsubishi' %} selected="selected" {% endif %}>Mitsubishi</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label>Car Type</label>
+                                <select name="carType" class="form-control">
+                                    <option value="0">Any</option>
+                                    <option value="1" {% if session['car_type'] == '1' %} selected="selected" {% endif %}>Sedan</option>
+                                    <option value="2" {% if session['car_type'] == '2' %} selected="selected" {% endif %}>Hatch</option>
+                                    <option value="3" {% if session['car_type'] == '3' %} selected="selected" {% endif %}>SUV</option>
+                                    <!-- <option value="1">Sedan</option>
+                                    <option value="2">Hatch</option>
+                                    <option value="3" selected="selected">SUV</option> -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Colour</label>
+                                <select name="carColor" class="form-control">
+                                    <option value="0">Any</option>
+                                    <option value="Red" {% if session['car_colour'] == 'Red' %} selected="selected" {% endif %}>Red</option>
+                                    <option value="Yellow" {% if session['car_colour'] == 'Yellow' %} selected="selected" {% endif %}>Yellow</option>
+                                    <option value="Blue" {% if session['car_colour'] == 'Blue' %} selected="selected" {% endif %}>Blue</option>
+                                    <option value="Black" {% if session['car_colour'] == 'Black' %} selected="selected" {% endif %}>Black</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label>Seats</label>
+                                <select name="carSeat" class="form-control">
+                                    <option value="0">Any</option>
+                                    <option value="4" {% if session['car_seat'] == '4' %} selected="selected" {% endif %}>4</option>
+                                    <option value="5" {% if session['car_seat'] == '5' %} selected="selected" {% endif %}>5</option>
+                                    <option value="6" {% if session['car_seat'] == '6' %} selected="selected" {% endif %}>6</option>
+                                    <option value="7" {% if session['car_seat'] == '7' %} selected="selected" {% endif %}>7</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-12">
+                                <label>Pick-up Date & Time:</label>
+                            </div>
+                            <div class="col-7">
+                                <input type="text" class="form-control" name="pickupDate" value="{{ session['pickup_date'] }}" placeholder="DD-MM-YYYY" required="required">
+                            </div>
+                            <div class="col-5">
+                                <select name="pickupTime" class="form-control">
+                                    <option value="00:00" {% if session['pickup_time'] == '00:00' %} selected="selected" {% endif %}>00:00</option>
+                                    <option value="00:30" {% if session['pickup_time'] == '00:30' %} selected="selected" {% endif %}>00:30</option>
+                                    <option value="01:00" {% if session['pickup_time'] == '01:00' %} selected="selected" {% endif %}>01:00</option>
+                                    <option value="01:30" {% if session['pickup_time'] == '01:30' %} selected="selected" {% endif %}>01:30</option>
+                                    <option value="02:00" {% if session['pickup_time'] == '02:00' %} selected="selected" {% endif %}>02:00</option>
+                                    <option value="02:30" {% if session['pickup_time'] == '02:30' %} selected="selected" {% endif %}>02:30</option>
+                                    <option value="03:00" {% if session['pickup_time'] == '03:00' %} selected="selected" {% endif %}>03:00</option>
+                                    <option value="03:30" {% if session['pickup_time'] == '03:30' %} selected="selected" {% endif %}>03:30</option>
+                                    <option value="04:00" {% if session['pickup_time'] == '04:00' %} selected="selected" {% endif %}>04:00</option>
+                                    <option value="04:30" {% if session['pickup_time'] == '04:30' %} selected="selected" {% endif %}>04:30</option>
+                                    <option value="05:00" {% if session['pickup_time'] == '05:00' %} selected="selected" {% endif %}>05:00</option>
+                                    <option value="05:30" {% if session['pickup_time'] == '05:30' %} selected="selected" {% endif %}>05:30</option>
+                                    <option value="06:00" {% if session['pickup_time'] == '06:00' %} selected="selected" {% endif %}>06:00</option>
+                                    <option value="06:30" {% if session['pickup_time'] == '06:30' %} selected="selected" {% endif %}>06:30</option>
+                                    <option value="07:00" {% if session['pickup_time'] == '07:00' %} selected="selected" {% endif %}>07:00</option>
+                                    <option value="07:30" {% if session['pickup_time'] == '07:30' %} selected="selected" {% endif %}>07:30</option>
+                                    <option value="08:00" {% if session['pickup_time'] == '08:00' %} selected="selected" {% endif %}>08:00</option>
+                                    <option value="08:30" {% if session['pickup_time'] == '08:30' %} selected="selected" {% endif %}>08:30</option>
+                                    <option value="09:00" {% if session['pickup_time'] == '09:00' %} selected="selected" {% endif %}>09:00</option>
+                                    <option value="09:30" {% if session['pickup_time'] == '09:30' %} selected="selected" {% endif %}>09:30</option>
+                                    <option value="10:00" {% if session['pickup_time'] == '10:00' %} selected="selected" {% endif %}>10:00</option>
+                                    <option value="10:30" {% if session['pickup_time'] == '10:30' %} selected="selected" {% endif %}>10:30</option>
+                                    <option value="11:00" {% if session['pickup_time'] == '11:00' %} selected="selected" {% endif %}>11:00</option>
+                                    <option value="11:30" {% if session['pickup_time'] == '11:30' %} selected="selected" {% endif %}>11:30</option>
+                                    <option value="12:00" {% if session['pickup_time'] == '12:00' %} selected="selected" {% endif %}>12:00</option>
+                                    <option value="12:30" {% if session['pickup_time'] == '12:30' %} selected="selected" {% endif %}>12:30</option>
+                                    <option value="13:00" {% if session['pickup_time'] == '13:00' %} selected="selected" {% endif %}>13:00</option>
+                                    <option value="13:30" {% if session['pickup_time'] == '13:30' %} selected="selected" {% endif %}>13:30</option>
+                                    <option value="14:00" {% if session['pickup_time'] == '14:00' %} selected="selected" {% endif %}>14:00</option>
+                                    <option value="14:30" {% if session['pickup_time'] == '14:30' %} selected="selected" {% endif %}>14:30</option>
+                                    <option value="15:00" {% if session['pickup_time'] == '15:00' %} selected="selected" {% endif %}>15:00</option>
+                                    <option value="15:30" {% if session['pickup_time'] == '15:30' %} selected="selected" {% endif %}>15:30</option>
+                                    <option value="16:00" {% if session['pickup_time'] == '16:00' %} selected="selected" {% endif %}>16:00</option>
+                                    <option value="16:30" {% if session['pickup_time'] == '16:30' %} selected="selected" {% endif %}>16:30</option>
+                                    <option value="17:00" {% if session['pickup_time'] == '17:00' %} selected="selected" {% endif %}>17:00</option>
+                                    <option value="17:30" {% if session['pickup_time'] == '17:30' %} selected="selected" {% endif %}>17:30</option>
+                                    <option value="18:00" {% if session['pickup_time'] == '18:00' %} selected="selected" {% endif %}>18:00</option>
+                                    <option value="18:30" {% if session['pickup_time'] == '18:30' %} selected="selected" {% endif %}>18:30</option>
+                                    <option value="19:00" {% if session['pickup_time'] == '19:00' %} selected="selected" {% endif %}>19:00</option>
+                                    <option value="19:30" {% if session['pickup_time'] == '19:30' %} selected="selected" {% endif %}>19:30</option>
+                                    <option value="20:00" {% if session['pickup_time'] == '20:00' %} selected="selected" {% endif %}>20:00</option>
+                                    <option value="20:30" {% if session['pickup_time'] == '20:30' %} selected="selected" {% endif %}>20:30</option>
+                                    <option value="21:00" {% if session['pickup_time'] == '21:00' %} selected="selected" {% endif %}>21:00</option>
+                                    <option value="21:30" {% if session['pickup_time'] == '21:30' %} selected="selected" {% endif %}>21:30</option>
+                                    <option value="22:00" {% if session['pickup_time'] == '22:00' %} selected="selected" {% endif %}>22:00</option>
+                                    <option value="22:30" {% if session['pickup_time'] == '22:30' %} selected="selected" {% endif %}>22:30</option>
+                                    <option value="23:00" {% if session['pickup_time'] == '23:00' %} selected="selected" {% endif %}>23:00</option>
+                                    <option value="23:30" {% if session['pickup_time'] == '23:30' %} selected="selected" {% endif %}>23:30</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-12">
+                                <label>Return Date & Time:</label>
+                            </div>
+                            <div class="col-7">
+                                <input type="text" class="form-control" name="returnDate" value="{{ session['return_date'] }}" placeholder="DD-MM-YYYY" required="required">
+                            </div>
+                            <div class="col-5">
+                                <select name="returnTime" class="form-control">
+                                    <option value="00:00" {% if session['return_time'] == '00:00' %} selected="selected" {% endif %}>00:00</option>
+                                    <option value="00:30" {% if session['return_time'] == '00:30' %} selected="selected" {% endif %}>00:30</option>
+                                    <option value="01:00" {% if session['return_time'] == '01:00' %} selected="selected" {% endif %}>01:00</option>
+                                    <option value="01:30" {% if session['return_time'] == '01:30' %} selected="selected" {% endif %}>01:30</option>
+                                    <option value="02:00" {% if session['return_time'] == '02:00' %} selected="selected" {% endif %}>02:00</option>
+                                    <option value="02:30" {% if session['return_time'] == '02:30' %} selected="selected" {% endif %}>02:30</option>
+                                    <option value="03:00" {% if session['return_time'] == '03:00' %} selected="selected" {% endif %}>03:00</option>
+                                    <option value="03:30" {% if session['return_time'] == '03:30' %} selected="selected" {% endif %}>03:30</option>
+                                    <option value="04:00" {% if session['return_time'] == '04:00' %} selected="selected" {% endif %}>04:00</option>
+                                    <option value="04:30" {% if session['return_time'] == '04:30' %} selected="selected" {% endif %}>04:30</option>
+                                    <option value="05:00" {% if session['return_time'] == '05:00' %} selected="selected" {% endif %}>05:00</option>
+                                    <option value="05:30" {% if session['return_time'] == '05:30' %} selected="selected" {% endif %}>05:30</option>
+                                    <option value="06:00" {% if session['return_time'] == '06:00' %} selected="selected" {% endif %}>06:00</option>
+                                    <option value="06:30" {% if session['return_time'] == '06:30' %} selected="selected" {% endif %}>06:30</option>
+                                    <option value="07:00" {% if session['return_time'] == '07:00' %} selected="selected" {% endif %}>07:00</option>
+                                    <option value="07:30" {% if session['return_time'] == '07:30' %} selected="selected" {% endif %}>07:30</option>
+                                    <option value="08:00" {% if session['return_time'] == '08:00' %} selected="selected" {% endif %}>08:00</option>
+                                    <option value="08:30" {% if session['return_time'] == '08:30' %} selected="selected" {% endif %}>08:30</option>
+                                    <option value="09:00" {% if session['return_time'] == '09:00' %} selected="selected" {% endif %}>09:00</option>
+                                    <option value="09:30" {% if session['return_time'] == '09:30' %} selected="selected" {% endif %}>09:30</option>
+                                    <option value="10:00" {% if session['return_time'] == '10:00' %} selected="selected" {% endif %}>10:00</option>
+                                    <option value="10:30" {% if session['return_time'] == '10:30' %} selected="selected" {% endif %}>10:30</option>
+                                    <option value="11:00" {% if session['return_time'] == '11:00' %} selected="selected" {% endif %}>11:00</option>
+                                    <option value="11:30" {% if session['return_time'] == '11:30' %} selected="selected" {% endif %}>11:30</option>
+                                    <option value="12:00" {% if session['return_time'] == '12:00' %} selected="selected" {% endif %}>12:00</option>
+                                    <option value="12:30" {% if session['return_time'] == '12:30' %} selected="selected" {% endif %}>12:30</option>
+                                    <option value="13:00" {% if session['return_time'] == '13:00' %} selected="selected" {% endif %}>13:00</option>
+                                    <option value="13:30" {% if session['return_time'] == '13:30' %} selected="selected" {% endif %}>13:30</option>
+                                    <option value="14:00" {% if session['return_time'] == '14:00' %} selected="selected" {% endif %}>14:00</option>
+                                    <option value="14:30" {% if session['return_time'] == '14:30' %} selected="selected" {% endif %}>14:30</option>
+                                    <option value="15:00" {% if session['return_time'] == '15:00' %} selected="selected" {% endif %}>15:00</option>
+                                    <option value="15:30" {% if session['return_time'] == '15:30' %} selected="selected" {% endif %}>15:30</option>
+                                    <option value="16:00" {% if session['return_time'] == '16:00' %} selected="selected" {% endif %}>16:00</option>
+                                    <option value="16:30" {% if session['return_time'] == '16:30' %} selected="selected" {% endif %}>16:30</option>
+                                    <option value="17:00" {% if session['return_time'] == '17:00' %} selected="selected" {% endif %}>17:00</option>
+                                    <option value="17:30" {% if session['return_time'] == '17:30' %} selected="selected" {% endif %}>17:30</option>
+                                    <option value="18:00" {% if session['return_time'] == '18:00' %} selected="selected" {% endif %}>18:00</option>
+                                    <option value="18:30" {% if session['return_time'] == '18:30' %} selected="selected" {% endif %}>18:30</option>
+                                    <option value="19:00" {% if session['return_time'] == '19:00' %} selected="selected" {% endif %}>19:00</option>
+                                    <option value="19:30" {% if session['return_time'] == '19:30' %} selected="selected" {% endif %}>19:30</option>
+                                    <option value="20:00" {% if session['return_time'] == '20:00' %} selected="selected" {% endif %}>20:00</option>
+                                    <option value="20:30" {% if session['return_time'] == '20:30' %} selected="selected" {% endif %}>20:30</option>
+                                    <option value="21:00" {% if session['return_time'] == '21:00' %} selected="selected" {% endif %}>21:00</option>
+                                    <option value="21:30" {% if session['return_time'] == '21:30' %} selected="selected" {% endif %}>21:30</option>
+                                    <option value="22:00" {% if session['return_time'] == '22:00' %} selected="selected" {% endif %}>22:00</option>
+                                    <option value="22:30" {% if session['return_time'] == '22:30' %} selected="selected" {% endif %}>22:30</option>
+                                    <option value="23:00" {% if session['return_time'] == '23:00' %} selected="selected" {% endif %}>23:00</option>
+                                    <option value="23:30" {% if session['return_time'] == '23:30' %} selected="selected" {% endif %}>23:30</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                    <label>Pick-up Date & Time:</label>
+                    <div class="col-4">
+                        <input type="text" class="form-control" placeholder="MinVal">
+                    </div>
+                    <div class="col-4">
+                        <input type="text" class="form-control" placeholder="MaxVal">
+                    </div>
+                    <input type="text" class="form-control col-5" name="startDate" value="{{ session['start_date'] }}" placeholder="DD-MM-YYYY">
+                    <input type="text" class="form-control col-5" name="startDate" value="{{ session['start_date'] }}" placeholder="DD-MM-YYYY">
+                </div>
+                <div class="form-group">
+                    <label>Return Date & Time:</label>
+                    <input type="text" class="form-control" name="endDate" value="{{ session['end_date'] }}" placeholder="DD-MM-YYYY">
+                </div> -->
+                    <!-- <div class="form-group">
+                    <label>Time</label>
+                    <input type="text" class="form-control" name="pickupTime" value="{{ session['pickup_time'] }}" placeholder="HH:MM">
+                </div> -->
+                    <button type="submit" class="btn btn-primary">Search Now</button>
+                </form>
+            </div>
+            <div class="col-8">
+                <label>Search Results</label>
+                <p>{{ session['renting_length'] }}</p>
+                <table class="table thead-dark table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>Make/Model</th>
+                            <th>Seats</th>
+                            <th>Colour</th>
+                            <th>Type</th>
+                            <th>Location</th>
+                            <th>Cost (Per Hour)</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for car in carlist %}
+                        <tr>
+                            <td>{{ car.make_name }} {{ car.model_name }}</td>
+                            <td>{{ car.seating_capacity }} Seats</td>
+                            <td>{{ car.colour }}</td>
+                            <td>{{ car.car_type }}</td>
+                            <td></td>
+                            <td>${{ car.price_per_hour }}</td>
+                            <td>${{ car.price_total }}</td>
+                            <td>
+                                <center>
+                                    <a href="{{ url_for('search') }}/{{ car.car_id }}/{{ car.price_total }}" class="btn btn-success btn-sm">
+                                    Book Now!
+                                </a>
+                                </center>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

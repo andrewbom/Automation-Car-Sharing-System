@@ -1,0 +1,49 @@
+{% extends 'layout.html' %} {% block title %}Booking History{% endblock %} {% block content %}
+<h2>Booking History Page</h2>
+{% for message in get_flashed_messages() %}
+<p>{{ message }}</p>
+{% endfor %}
+<div>
+    <p>Booking History:</p>
+    <table class="table thead-dark table-bordered">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Car</th>
+                <th>Pickup Date</th>
+                <th>Pickup Time</th>
+                <th>Return Date</th>
+                <th>Return Time</th>
+                <th>Booked By</th>
+                <th>Booking Amount</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in history %}
+            <tr>
+                <td>{{ booking.booking_id }}</td>
+                <td>{{ booking.make_name }} {{ booking.model_name }}</td>
+                <td>{{ booking.pickup_date }}</td>
+                <td>{{ booking.pickup_time }}</td>
+                <td>{{ booking.return_date }}</td>
+                <td>{{ booking.return_time }}</td>
+                <td>{{ booking.first_name }} {{ booking.last_name }}</td>
+                <td>${{ booking.booking_amount }}</td>
+                <td>{{ booking.booking_status }}</td>
+                <td>
+                    {% if booking.booking_status == 'booked' %}
+                    <center>
+                        <a href="{{ url_for('bookinghistory') }}/{{ booking.booking_id }}" class="btn btn-danger btn-sm">
+                            Cancel Booking
+                        </a>
+                    </center>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

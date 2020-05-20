@@ -1,0 +1,13 @@
+The training.py file should be ran to train the recognition model
+faces to be recognized should be placed in /data/raw
+images should be preferably png (the more different images per face the more accurate the model)
+image label become the person id
+
+images labels should follow the following example
+example: person with id = 1
+    mary.1.1.png
+    mary.1.2.png
+   . 
+   .  
+
+**DO NOT DELETE raw and dataset folders.Only its content can be deleted
