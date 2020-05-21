@@ -203,7 +203,7 @@ class TestDatabaseUtils(unittest.TestCase):
                 dbcount = 1
             existcount = self.bookingExists('1', '1')
             self.assertTrue(existcount == dbcount)
-
+ 
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
