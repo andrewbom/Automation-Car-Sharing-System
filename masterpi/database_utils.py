@@ -70,7 +70,7 @@ class DatabaseUtils:
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
             """)
             cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Toyota', 'Camry', '4', 'Red', 1, 15, "
-                           "'Flinders', 'available' , -37.8183, 144.9671 );")
+                           "'Flinders', 'available' , -35.8183, 146.9671 );")
             cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Mazda', 'CX-5', '4', 'Yellow', 3, 20, "
                            "'Box hills', 'available', -37.8181, 145.1239);")
             cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Nissan', 'Altima', '5', 'Black', 1, 10, "

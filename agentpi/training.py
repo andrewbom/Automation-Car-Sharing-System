@@ -9,25 +9,22 @@ RAW_FOLDER = os.getcwd()+'/data/raw/'
 
 def getImagesAndLabels():
     imagePaths = [os.path.join(RAW_FOLDER ,f) for f in os.listdir(RAW_FOLDER )] 
-    # Initialize empty face sample
-    faceSamples=[]
-    # Initialize empty id
-    ids = []
+    faceSamples=[]         # Initialize empty face sample
+    ids = []               # Initialize empty id
     print("Training started!")
-    #os.remove('trainer/trainer.yml')
+  
     # Loop all the file path
     for imagePath in imagePaths:
-        # Get the image and convert it to grayscale
-        PIL_img = Image.open(imagePath).convert('L')
+        PIL_img = Image.open(imagePath).convert('L')        # Get the image and convert it to grayscale
         img_numpy = numpy.array(PIL_img,'uint8')
         id = int(os.path.split(imagePath)[-1].split(".")[1])
         faces = cv2.CascadeClassifier("/home/pi/Projects/agentpi/haarcascade_frontalface_alt.xml").detectMultiScale(img_numpy)
+        
+        
         # Loop for each face, append to their respective ID
         for (x,y,w,h) in faces:
-            # Add the image to face samples
-            faceSamples.append(img_numpy[y:y+h,x:x+w])
-            # Add the ID to IDs
-            ids.append(id)
+            faceSamples.append(img_numpy[y:y+h,x:x+w])      # Add the image to face samples
+            ids.append(id)                                  # Add the ID to IDs
 
     for image in os.listdir(RAW_FOLDER):
         img = cv2.imread(os.path.join(RAW_FOLDER,image))

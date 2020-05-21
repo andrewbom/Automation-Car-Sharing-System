@@ -30,7 +30,7 @@ def receive(socket, signal):
             signal = False
             break
  
- 
+#Function to check location data using the wifi of device 
 def location_update():
    map_initial_time = time.time()
    while(connected == True):
@@ -38,10 +38,7 @@ def location_update():
           if new_map_time >= 10:
               locate = Car_location()
               loc_data = locate.Get_Location()
-              #print(loc_data)
-              
               sock.sendall(str.encode(loc_data))
-              #print("location data sent")
               map_initial_time = time.time()  
               
                        
@@ -53,9 +50,7 @@ try:
     
 except:
     print("Connection not established")
-    sys.stdout.write("Trying to connect: %s \r" % (progress*count) )
-    sys.stdout.flush()
-
+    
 start_time = time.time()
 sys.stdout.write("Trying to connect: %s \r" % (progress*count) )
 sys.stdout.flush()
@@ -76,61 +71,98 @@ while(connected == False):
                   sys.stdout.flush()
                   start_time = time.time()
                   
-#Create new thread to wait for data
+#Create new thread to wait for data and wait for location update
 receiveThread = threading.Thread(target = receive, args = (sock, True))
 receiveThread.start()
 locationThread = threading.Thread(target = location_update)
 locationThread.start()
 
-#Send data to server
-#str.encode is used to turn the string message into bytes so it can be sent across the network
+#Loop for console user inputs
 while True:   
-       
-   # message = '{"customer_id":"6","car_id":"1","username":"abc@gmail.com","password":"123"}'
    clear = lambda: os.system('clear') 
-   title = 'Please select an authorization option: '
-   options = ['use username and password', 'use face recognition']
+   title = 'Please select an option: '
+   options = ['Unlock Booked Car', 'Return Car']
    option, index = pick(options, title)
    print(option)
    print("##########")
    print("########## \n")
    
    if(index == 0):
-       username = input("Insert Username :")
-       print("\n")
-       
-       password = getpass("Insert password :")
-       print("\n")
+       status = "collected"
 
-       customer_id = input("Insert your Customer ID :")
-       print("\n")    
+       title = 'Please select an authorization option: '
+       options = ['use username and password', 'use face recognition']
+       option, index = pick(options, title)
+       print(option)
+       print("##########")
+       print("########## \n")
 
-       car_id = input("Insert Car ID :")
-       print("\n")
-       
-       #db =  Database_utils()
-       #cardata = db.get_car_data()
-       #userdata =  db.get_user_data()
-       #car_id = cardata[1]
-       #customer_id = userdata[3]
+       if(index == 0):
+              username = input("Insert Username :")
+              print("\n")
 
-       message = '{"type":"credentials","username":"%s","password":"%s","customer_id":"%s","car_id":"%s"}'% (username, password, customer_id, car_id)
-       print("\n")
-       print(data)
-       sock.sendall(str.encode(message))
-       time.sleep(10)
-       clear()
+              password = getpass("Insert password :")
+              print("\n")
+
+              customer_id = input("Insert your Customer ID :")
+              print("\n")    
+
+              car_id = input("Insert Car ID :")
+              print("\n")
+
+              message = '{"type":"credentials","status":"%s","username":"%s","password":"%s","customer_id":"%s","car_id":"%s"}'% (status ,username, password, customer_id, car_id)
+              print("\n")
+              print(data)
+              sock.sendall(str.encode(message))
+              time.sleep(10)
+              clear()
+
+       elif(index == 1):
+              recog = Recognition()
+              data = recog.start_recognition(status)
+              sock.sendall(str.encode(data))
+              print(data)
+              time.sleep(10)
+              clear()
      
    elif(index == 1):
-       recog = Recognition()
-       data = recog.start_recognition()
-       #message = '{"username":"%s","password":"%s","car_id":"%s"}'% (username,password,car_id)
-       sock.sendall(str.encode(data))
-       print(data)
-       time.sleep(10)
-       clear()
-       
-      
+          status = "returned"
+          title = 'Please select an authorization option: '
+          options = ['use username and password', 'use face recognition']
+          option, index = pick(options, title)
+          print(option)
+          print("##########")
+          print("########## \n")
+          
+          if(index == 0):
+              username = input("Insert Username :")
+              print("\n")
+              
+              password = getpass("Insert password :")
+              print("\n")
+
+              customer_id = input("Insert your Customer ID :")
+              print("\n")    
+
+              car_id = input("Insert Car ID :")
+              print("\n")
+              
+              message = '{"type":"credentials","status":"%s","username":"%s","password":"%s","customer_id":"%s","car_id":"%s"}'% (status ,username, password, customer_id, car_id)
+              print("\n")
+              print(data)
+              sock.sendall(str.encode(message))
+              time.sleep(10)
+              clear()
+            
+          elif(index == 1):
+              recog = Recognition()
+              data = recog.start_recognition(status)
+              sock.sendall(str.encode(data))
+              print(data)
+              time.sleep(10)
+              clear()
+              
+             
        
     
    

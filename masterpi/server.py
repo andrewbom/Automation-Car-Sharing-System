@@ -53,7 +53,6 @@ class ServerClass:
                     try:
                         new_data = json.loads(data)
                         print("ID " + str(self.id) + ": " + str(data.decode("utf-8")))
-                        # date = new_data["date"]
                         data_type = new_data["type"]
 
                         # check if the data type is credentials
@@ -91,7 +90,7 @@ class ServerClass:
                             else:
                                 for client in connections:
                                     if client.id == self.id:
-                                        client.socket.send(str.encode("Your account or password is wrong! Please try again."))
+                                        client.socket.send(str.encode("Username or password is incorrect"))
 
                         # check if the data type is location
                         elif data_type == "location":
