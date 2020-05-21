@@ -41,7 +41,7 @@ class ServerClass:
             while self.signal:
                 try:
                     # receiving the data from agent_pi
-                    data = self.socket.recv(120)
+                    data = self.socket.recv(200)
                 except:
                     # show the message that signal is disconnected
                     print("Client " + str(self.address) + " has disconnected")
@@ -55,7 +55,8 @@ class ServerClass:
                         print("ID " + str(self.id) + ": " + str(data.decode("utf-8")))
                         data_type = new_data["type"]
 
-                        # check if the data type is credentials
+                        # There will be 2 types of data that send by agent pi, they are: "credentials" and "location"
+                        # check if the data type is "credentials"
                         if data_type == "credentials":
 
                             # assigning the variables to the user account information that entered in the agent_pi
@@ -69,22 +70,41 @@ class ServerClass:
 
                             # if the account information match that on cloud database
                             if user_data is not None:
-                                # validate whether the user has booked the car
-                                verify = db.validate_collection(customer_id, car_id)
 
-                                # if verify successfully
-                                if verify is not None:
-                                    for client in connections:
-                                        if client.id == self.id:
-                                            client.socket.send(str.encode("Unlocking Accepted"))
-                                            booking_status = "Collected"
-                                            db.update_booking(verify["booking_id"], booking_status)
+                                # Request from agent pi for unlocking the car
+                                if new_data["status"] == "collected":
+                                    # validate whether the user has booked the car
+                                    verify = db.validate_collection(customer_id, car_id)
 
-                                # if verify failed
-                                else:
-                                    for client in connections:
-                                        if client.id == self.id:
-                                            client.socket.send(str.encode("Unlocking Denied"))
+                                    # if verify successfully
+                                    if verify is not None:
+                                        for client in connections:
+                                            if client.id == self.id:
+                                                client.socket.send(str.encode("The Car has successfully unlocked."))
+                                                db.update_booking(verify["booking_id"], new_data["status"])
+                                    # if verify failed
+                                    else:
+                                        for client in connections:
+                                            if client.id == self.id:
+                                                client.socket.send(str.encode("Unlocking Denied"))
+
+                                # Request from agent pi for returning the car
+                                if new_data["status"] == "returned":
+                                    # validate whether the user has collected the car before
+                                    verify = db.validate_return_car(customer_id, car_id)
+
+                                    # if verify successfully
+                                    if verify is not None:
+                                        for client in connections:
+                                            if client.id == self.id:
+                                                client.socket.send(str.encode("Car Return Successfully."))
+                                                # booking_status = new_data["status"]
+                                                db.update_booking(verify["booking_id"], new_data["status"])
+                                    # if verify failed
+                                    else:
+                                        for client in connections:
+                                            if client.id == self.id:
+                                                client.socket.send(str.encode("Car Return Denied"))
 
                             # if the account information DOES NOT match that on cloud database
                             else:
@@ -92,7 +112,7 @@ class ServerClass:
                                     if client.id == self.id:
                                         client.socket.send(str.encode("Username or password is incorrect"))
 
-                        # check if the data type is location
+                        # check if the data type is "location"
                         elif data_type == "location":
                             car_id = new_data["car_id"]
                             longitude = new_data["longitude"]

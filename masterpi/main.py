@@ -283,7 +283,7 @@ def map_bounded():
     if 'loggedin' in session:
         # creating a map in the view
         cars = db.get_all_car_location()
-
+        print(cars)
         # getting car's location information from cloud database
         location_detail = [{
             "infobox": str(item["infobox"]),
@@ -311,4 +311,4 @@ def map_bounded():
 if __name__ == "__main__":
     sv = ServerClass()
     sv.Serve()
-    app.run(debug=False)
+    app.run(debug = False)

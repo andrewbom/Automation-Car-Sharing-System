@@ -70,7 +70,7 @@ class DatabaseUtils:
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
             """)
             cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Toyota', 'Camry', '4', 'Red', 1, 15, "
-                           "'Flinders', 'available' , -35.8183, 146.9671 );")
+                           "'Flinders', 'available' , -35.8183, 146.9671);")
             cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Mazda', 'CX-5', '4', 'Yellow', 3, 20, "
                            "'Box hills', 'available', -37.8181, 145.1239);")
             cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Nissan', 'Altima', '5', 'Black', 1, 10, "
@@ -245,15 +245,27 @@ class DatabaseUtils:
 
     # validate whether the user has booked the car and fetch that information
     def validate_collection(self, customer_id, car_id):
-        booking_status = "booked"
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
         cursor.execute("Select * "
                        "from bookings "
                        "where "
                        "customer_id = %s "
                        "AND car_id = %s "
-                       "AND booking_status =  %s",
-                       (customer_id, car_id, booking_status))
+                       "AND booking_status = 'booked'",
+                       (customer_id, car_id))
+
+        return cursor.fetchone()
+
+    # validate whether the user has collected the car and fetch that information
+    def validate_return_car(self, customer_id, car_id):
+        cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("Select * "
+                       "from bookings "
+                       "where "
+                       "customer_id = %s "
+                       "AND car_id = %s "
+                       "AND booking_status = 'collected'",
+                       (customer_id, car_id))
 
         return cursor.fetchone()
 
