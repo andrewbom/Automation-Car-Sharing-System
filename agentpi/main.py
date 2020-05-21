@@ -126,44 +126,57 @@ while True:
               clear()
      
    elif(index == 1):
-          status = "returned"
-          title = 'Please select an authorization option: '
-          options = ['use username and password', 'use face recognition']
-          option, index = pick(options, title)
-          print(option)
-          print("##########")
-          print("########## \n")
+<<<<<<< HEAD
+      status = "returned"
+      title = 'Please select an authorization option: '
+      options = ['use username and password', 'use face recognition']
+      option, index = pick(options, title)
+      print(option)
+      print("##########")
+      print("########## \n")
           
-          if(index == 0):
-              username = input("Insert Username :")
-              print("\n")
-              
-              password = getpass("Insert password :")
-              print("\n")
+      if(index == 0):
+          username = input("Insert Username :")
+          print("\n")
 
-              customer_id = input("Insert your Customer ID :")
-              print("\n")    
+          password = getpass("Insert password :")
+          print("\n")
 
-              car_id = input("Insert Car ID :")
-              print("\n")
-              
-              message = '{"type":"credentials","status":"%s","username":"%s","password":"%s","customer_id":"%s","car_id":"%s"}'% (status ,username, password, customer_id, car_id)
-              print("\n")
-              print(data)
-              sock.sendall(str.encode(message))
-              time.sleep(10)
-              clear()
-            
-          elif(index == 1):
-              recog = Recognition()
-              data = recog.start_recognition(status)
-              sock.sendall(str.encode(data))
-              print(data)
-              time.sleep(10)
-              clear()
+          customer_id = input("Insert your Customer ID :")
+          print("\n")
+
+          car_id = input("Insert Car ID :")
+          print("\n")
+
+          message = '{"type":"credentials","status":"%s","username":"%s","password":"%s","customer_id":"%s","car_id":"%s"}'% (status ,username, password, customer_id, car_id)
+          print("\n")
+          print(data)
+          sock.sendall(str.encode(message))
+          time.sleep(10)
+          clear()
+
+      elif(index == 1):
+          recog = Recognition()
+          data = recog.start_recognition(status)
+          sock.sendall(str.encode(data))
+          print(data)
+          time.sleep(10)
+          clear()
               
              
        
+=======
+       recog = Recognition()
+       data = recog.start_recognition()
+       #message = '{"username":"%s","password":"%s","car_id":"%s"}'% (username,password,car_id)
+       sock.sendall(str.encode(data))
+       print(data)
+       time.sleep(10)
+       clear()
+       
+      
+        
+>>>>>>> 9bef06b9aa445cd6fb528102b2a7b14ce5fdd301
     
    
 
