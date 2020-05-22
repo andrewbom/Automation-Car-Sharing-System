@@ -290,9 +290,6 @@ def map_bounded():
             "lat": float(item["lat"]),
             "lng": float(item["lng"])} for item in cars]
 
-        location_data = json.dumps(location_detail)
-        print(location_data)
-
         # initialize the google map page
         carsmap = Map(
             identifier="carsmap",
@@ -311,4 +308,4 @@ def map_bounded():
 if __name__ == "__main__":
     sv = ServerClass()
     sv.Serve()
-    app.run(debug = False)
+    app.run(debug=True)

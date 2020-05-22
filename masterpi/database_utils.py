@@ -63,8 +63,8 @@ class DatabaseUtils:
                     `price_per_hour` decimal(10,2) NOT NULL,
                     `registration_no` varchar(10) DEFAULT NULL,
                     `status` varchar(15) NOT NULL,
-                    `latitude` decimal(40,15) NOT NULL,
-                    `longitude` decimal(40,15) NOT NULL,
+                    `latitude` varchar(20)  NOT NULL,
+                    `longitude` varchar(20) NOT NULL,
                     UNIQUE(`registration_no`),
                     PRIMARY KEY (`car_id`)                    
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
