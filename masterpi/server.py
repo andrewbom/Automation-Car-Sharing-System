@@ -138,7 +138,7 @@ class ServerClass:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("192.168.1.7", 5001))
-        sock.listen(5)
+        # sock.listen(5)
 
         # Create new thread to wait for connections
         newConnectionsThread = threading.Thread(target=self.newConnections, args=(sock,))
