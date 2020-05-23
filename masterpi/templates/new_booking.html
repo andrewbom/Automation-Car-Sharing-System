@@ -6,7 +6,7 @@
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-4">
+            <div class="col-md-4 col-sm-12">
                 <!-- {% print(session) %} -->
                 <form action="{{url_for('search')}}" method="POST" class="form-horizontal">
                     <div class="form-group">
@@ -204,7 +204,7 @@
                     <button type="submit" class="btn btn-primary">Search Now</button>
                 </form>
             </div>
-            <div class="col-8">
+            <div class="col-md-8 col-sm-12">
                 <label>Search Results</label>
                 <p>{{ session['renting_length'] }}</p>
                 <table class="table thead-dark table-bordered table-sm">

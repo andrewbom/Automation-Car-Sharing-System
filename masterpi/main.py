@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from passlib.hash import sha256_crypt
 from flask_googlemaps import GoogleMaps, Map
 from database_utils import DatabaseUtils
 from datetime import datetime
@@ -40,19 +41,24 @@ def login():
         password = request.form['password']
 
         # query the account from the database by passing the input username and password
-        account = db.login_account(email, password)
+        account = db.login_account(email)
 
         # Check if the account exists in the accounts table of database
         # If account exists, redirect to home page
         if account:
-            # Create session data, we can access these data in other routes
-            session['loggedin'] = True
-            session['id'] = account['customer_id']
-            session['firstname'] = account['first_name']
-            session['lastname'] = account['last_name']
-            session['email'] = account['email']
-            # Redirect to home page
-            return redirect(url_for('home'))
+            # Verifying hashed Password
+            if (sha256_crypt.verify(password, account['password'])):
+                # Create session data, we can access these data in other routes
+                session['loggedin'] = True
+                session['id'] = account['customer_id']
+                session['firstname'] = account['first_name']
+                session['lastname'] = account['last_name']
+                session['email'] = account['email']
+                # Redirect to home page
+                return redirect(url_for('home'))
+            else:
+                # Account doesnt exist or username/password incorrect
+                msg = 'Incorrect username/passwords!'
 
         # If account doesn't exist, show the error message and pass it to index.html
         else:
@@ -90,6 +96,7 @@ def register():
         lastname = request.form['last_name']
         email = request.form['email']
         password = request.form['password']
+        hashedpassword = sha256_crypt.using(rounds=1000).hash(password)
 
         # check whether the email has already registered in the database
         account = db.get_an_user(email)
@@ -104,7 +111,7 @@ def register():
 
         # if account doesn't existed, show the successful message and back to the login page
         else:
-            db.insert_account(firstname, lastname, email, password)
+            db.insert_account(firstname, lastname, email, hashedpassword)
             msg = 'You have successfully registered!'
             return render_template('index.html', msg=msg)
 
@@ -296,7 +303,7 @@ def map_bounded():
             lat=-37.8047,
             lng=144.9580,
             zoom=13,
-            style="height:1000px;width:1000px;margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto",
+            style="height:1000px;width:100%;margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto",
             markers=location_detail
         )
         return render_template('location.html', carsmap=carsmap)
@@ -308,4 +315,4 @@ def map_bounded():
 if __name__ == "__main__":
     sv = ServerClass()
     sv.Serve()
-    app.run(debug=True)
+    app.run(debug=False)

@@ -1,13 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from passlib.hash import sha256_crypt
 from datetime import datetime
 import pymysql  # MySQLdb  # pymysql
 import math
 
 
 class DatabaseUtils:
-    HOST = "35.201.23.126"  # google cloud IP address
+    HOST = "34.87.232.2"  # google cloud IP address
     USER = "root"  # google cloud sql user name
-    PASSWORD = "andrewishandsome"  # google cloud sql password
+    PASSWORD = "123456789"  # google cloud sql password
     DATABASE = "Pythonlogin"
 
     def __init__(self, connection=None):
@@ -31,26 +32,27 @@ class DatabaseUtils:
             cursor.execute("DROP TABLE IF EXISTS cars_list")
             cursor.execute("DROP TABLE IF EXISTS bookings")
 
+            # Creating default password and converting to hashing
+            hashedpassword = sha256_crypt.using(rounds=1000).hash("123")
+
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS `customers` (
                     `customer_id` int(11) NOT NULL AUTO_INCREMENT,
                     `first_name` varchar(100) NOT NULL,
                     `last_name` varchar(100) NOT NULL,
                     `email` varchar(100) NOT NULL,
-                    `password` varchar(50) NOT NULL,
+                    `password` text NOT NULL,
                     PRIMARY KEY (`customer_id`),
                     UNIQUE(`email`),
                     KEY `id` (`customer_id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
             """)
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Wayne', 'Wayne', 'abc@gmail.com', ""'123');")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'John', 'Mathew', 'john@gmail.com', '123');")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Anna', 'Williams', 'anna@gmail.com', '123');")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Harry', 'Robert', 'harry@gmail.com', '123');")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Charlie', 'William', 'carlie@gmail.com', "
-                           "'123');")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Oliver', 'Michelle', 'oliver@gmail.com', "
-                           "'123');")
+            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Wayne', 'Wayne', 'abc@gmail.com', '" + hashedpassword + "')")
+            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'John', 'Mathew', 'john@gmail.com', '" + hashedpassword + "')")
+            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Anna', 'Williams', 'anna@gmail.com', '" + hashedpassword + "')")
+            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Harry', 'Robert', 'harry@gmail.com', '" + hashedpassword + "')")
+            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Charlie', 'William', 'carlie@gmail.com', '" + hashedpassword + "')")
+            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Oliver', 'Michelle', 'oliver@gmail.com', '" + hashedpassword + "')")
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS `cars_list` (
@@ -105,9 +107,9 @@ class DatabaseUtils:
                            (firstname, lastname, email, password))
         self.connection.commit()
 
-    def login_account(self, email, password):
+    def login_account(self, email):
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT * FROM customers WHERE email = %s AND password = %s", (email, password))
+        cursor.execute("SELECT * FROM customers WHERE email = %s", (email))
 
         return cursor.fetchone()
 
