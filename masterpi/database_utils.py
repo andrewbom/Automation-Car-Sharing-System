@@ -172,7 +172,24 @@ class DatabaseUtils:
 
         return conflicts_arr
 
-    def get_all_available_car_type(self, car_type, pickup_date, return_date):
+    def get_all_available_car_type(self, car_make, car_type, car_colour, car_seat, pickup_date, return_date):
+
+        subquery_car_make = ""
+        if car_make != "":
+            subquery_car_make = " AND make_name = '" + car_make + "' "
+
+        subquery_car_type = ""
+        if car_type != "":
+            subquery_car_type = " AND car_type = '" + car_type + "' "
+
+        subquery_colour = ""
+        if colour != "":
+            subquery_colour = " AND colour = '" + colour + "' "
+
+        subquery_seating_capacity = ""
+        if seating_capacity != "":
+            subquery_seating_capacity = " AND seating_capacity = '" + seating_capacity + "' "
+
         pickup_oldformat = pickup_date
         pickup_datetimeobject = datetime.strptime(pickup_oldformat, '%d-%m-%Y')
         pickup_newformat = pickup_datetimeobject.strftime('%Y-%m-%d')
