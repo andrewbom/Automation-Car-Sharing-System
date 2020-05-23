@@ -119,6 +119,12 @@ class ServerClass:
                             latitude = new_data["latitude"]
                             db.update_car_location(car_id, latitude, longitude)
 
+                        elif data_type == "face recog fail":
+                            for client in connections:
+                                if client.id == self.id:
+                                    client.socket.send(str.encode("Facial Recognition fail."))
+
+
                     # if the received data from agent_pi cannot loaded properly
                     except:
                         pass
@@ -138,7 +144,7 @@ class ServerClass:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("192.168.0.3", 5001))
-        # sock.listen(5)
+        sock.listen(5)
 
         # Create new thread to wait for connections
         newConnectionsThread = threading.Thread(target=self.newConnections, args=(sock,))
