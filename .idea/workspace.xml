@@ -20,15 +20,97 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="36e98ca0-a393-4975-8007-af639e323081" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/IOT_Assignment_2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/IOT_Assignment_2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/masterpi/database_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/database_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/masterpi/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/masterpi/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/masterpi/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/masterpi/templates/location.html" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/templates/location.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/masterpi/templates/new_booking.html" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/templates/new_booking.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/adminpage.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/allbooked.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/booking.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/bookingfont-awesome.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/bootstrap.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/bootstrap.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/feedback.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/font-awesome.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/font-awesome.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/fontawesome-all.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/homepage.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/invoice.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/jquery-ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/lastpage.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/login.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/loginhistory.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/owl.carousel.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/owl.theme.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/payment.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/reset.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/css/wickedpicker.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/font-awesome.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/FontAwesome.otf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/abc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/fontawesome-webfont.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/fontawesome-webfont.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/fontawesome-webfont.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/fontawesome-webfont.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/fontawesome-webfont.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/fontello.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/fontello.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/fontello.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/fonts/fontello.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/Thumbs.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/abc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/arr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/arrows.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/banner1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/banner2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/banner3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/banner5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/bg.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/bg11.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/bg12.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/c-arrows.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/dott.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/feedback.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/green.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/pic1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/pic2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/pic3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/pic4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/tick-mark1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/images/visa.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/SmoothScroll.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/abc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/bootstrap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/easing.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/easyResponsiveTabs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/jquery-2.1.4.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/jquery-ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/jquery.countup.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/jquery.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/jquery.waypoints.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/move-top.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/owl.carousel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/responsiveslides.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/js/wickedpicker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/abc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-brands-400.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-brands-400.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-brands-400.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-brands-400.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-brands-400.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-regular-400.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-regular-400.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-regular-400.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-regular-400.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-regular-400.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-solid-900.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-solid-900.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-solid-900.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-solid-900.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/static/webfonts/fa-solid-900.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/masterpi/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/templates/profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,25 +193,25 @@
       <screen x="0" y="23" width="1440" height="827" />
     </state>
     <state x="417" y="51" key="#main/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590251495698" />
-    <state width="1419" height="156" key="GridCell.Tab.0.bottom" timestamp="1590256798201">
+    <state width="1419" height="156" key="GridCell.Tab.0.bottom" timestamp="1590257226441">
       <screen x="0" y="23" width="1440" height="827" />
     </state>
-    <state width="1419" height="156" key="GridCell.Tab.0.bottom/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590256798201" />
+    <state width="1419" height="156" key="GridCell.Tab.0.bottom/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590257226441" />
     <state width="1899" height="309" key="GridCell.Tab.0.bottom/0.23.1920.1032@0.23.1920.1032" timestamp="1590161219812" />
-    <state width="1419" height="156" key="GridCell.Tab.0.center" timestamp="1590256798200">
+    <state width="1419" height="156" key="GridCell.Tab.0.center" timestamp="1590257226440">
       <screen x="0" y="23" width="1440" height="827" />
     </state>
-    <state width="1419" height="156" key="GridCell.Tab.0.center/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590256798200" />
+    <state width="1419" height="156" key="GridCell.Tab.0.center/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590257226440" />
     <state width="1899" height="309" key="GridCell.Tab.0.center/0.23.1920.1032@0.23.1920.1032" timestamp="1590161219811" />
-    <state width="1419" height="156" key="GridCell.Tab.0.left" timestamp="1590256798199">
+    <state width="1419" height="156" key="GridCell.Tab.0.left" timestamp="1590257226439">
       <screen x="0" y="23" width="1440" height="827" />
     </state>
-    <state width="1419" height="156" key="GridCell.Tab.0.left/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590256798199" />
+    <state width="1419" height="156" key="GridCell.Tab.0.left/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590257226439" />
     <state width="1899" height="309" key="GridCell.Tab.0.left/0.23.1920.1032@0.23.1920.1032" timestamp="1590161219810" />
-    <state width="1419" height="156" key="GridCell.Tab.0.right" timestamp="1590256798200">
+    <state width="1419" height="156" key="GridCell.Tab.0.right" timestamp="1590257226441">
       <screen x="0" y="23" width="1440" height="827" />
     </state>
-    <state width="1419" height="156" key="GridCell.Tab.0.right/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590256798200" />
+    <state width="1419" height="156" key="GridCell.Tab.0.right/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590257226441" />
     <state width="1899" height="309" key="GridCell.Tab.0.right/0.23.1920.1032@0.23.1920.1032" timestamp="1590161219811" />
     <state x="145" y="252" width="670" height="676" key="search.everywhere.popup" timestamp="1589994287261">
       <screen x="0" y="23" width="1920" height="1032" />
