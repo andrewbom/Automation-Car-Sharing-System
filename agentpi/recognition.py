@@ -1,5 +1,3 @@
-from picamera.array import PiRGBArray
-from picamera import PiCamera
 import cv2
 import sys
 import time
@@ -14,7 +12,7 @@ class Recognition:
         # Loading model
         self.recognizer.read('/home/pi/Projects/agentpi/trainer/trainer.yml')
         # Load the haarcascade Frontal Face model
-        self.cascadePath = "/home/pi/Projects/agentpi/haarcascade_frontalface_alt.xml"
+        self.cascadePath = "/home/pi/Projects/agentpi/haarcascade_frontalface_default.xml"
 
     def start_recognition(self, status):
         # Create classifier from pre-built model
@@ -24,13 +22,13 @@ class Recognition:
         print("Starting camera..")
         # Starting the usb camera that connected to agent pi
         camera = cv2.VideoCapture(0)
-        rawCapture = PiRGBArray(camera, size=(384, 240))
         print("camera started")
         print("Please align your face")
 
         # Set timer for querying location of device
         start_time = time.time()
         end = False
+        DataTosend = {}
 
         # Loop for detecting face
         while True:
@@ -43,17 +41,20 @@ class Recognition:
 
                 # Draw a rectangle around the detected faces
                 for (x, y, w, h) in faces:
-                    cv2.rectangle(image, (x - 20, y - 20), (x + w + 20, y + h + 20), (0, 255, 0), 4)
+                    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                    # cv2.rectangle(image, (x - 20, y - 20), (x + w + 20, y + h + 20), (0, 255, 0), 4)
                     # Recognize the face belongs to which face ID
-                    id, conf = self.recognizer.predict(gray[y:y + h, x:x + w])
+                    face_id, conf = self.recognizer.predict(gray[y:y + h, x:x + w])
 
+                    # if conf < 50:
                     # Check if the face ID exists in the local database
-                    if id:
+                    if face_id:
                         db = Database_utils()
-                        userdata = db.get_face_data(id)
+                        # if existed, fetch the data
+                        userdata = db.get_face_data(face_id)
                         cardata = db.get_car_data()
 
-                        # If user with the face ID is present return user data to main
+                        # If user with the face ID is present, return user data to main
                         if userdata is not None:
                             username = userdata[1]
                             password = userdata[2]
@@ -67,31 +68,33 @@ class Recognition:
                                 "password": password,
                                 "customer_id": customer_id,
                                 "car_id": car_id,
-
                             }
-
                             DataTosend = json.dumps(data)
-                            # print(username)
-                            end = True
-                            break
 
-                        elif userdata is None and time.time() - start_time >= 30:
-                            print("User Not Found")
-                            end = True
-                            break
+                            # if the face has matched with the local database, show the information
+                            cv2.putText(image, str(username), (50, 50), font, 2, (255, 255, 255), 3)
+                            # wait for the user to press the key "q" to quit for face recognition process
+                            # if cv2.waitKey(10) & 0xFF == ord('q'):
+                            # end = True
+                            # break
 
-                    else:
-                        id = "unknown"
-                        # Put text describe who is in the picture
-                        cv2.rectangle(image, (x - 30, y - 90), (x + w + 22, y - 22), (0, 255, 0), -1)
-                        cv2.putText(image, str(id), (x, y - 90), font, 2, (255, 255, 255), 3)
+                        # If the face ID is NOT existed and the face recognition process has exceeded >= 30 secs
+                        # elif userdata is None and time.time() - start_time >= 10:
+                        elif userdata is None:
+                            face_id = "Unknown"
+                            # Put text describe who is in the picture
+                            cv2.putText(image, str(face_id), (50, 50), font, 2, (255, 255, 255), 3)
 
+                            data = {"type": "face recog fail"}
+                            DataTosend = json.dumps(data)
+
+            # set the window for displaying the camera
             cv2.imshow("Faces found", image)
-            cv2.waitKey(1)
-            rawCapture.truncate(0)
+            if cv2.waitKey(100) & 0xFF == ord('q'):
+                # rawCapture.truncate(0)
 
-            if end:
+                # if the face recognition process ends, close the camera and its window
+                # if end:
                 camera.release()
                 cv2.destroyAllWindows()
                 return DataTosend
-                break

@@ -22,18 +22,66 @@ class Database_utils:
 
     def sql_table(self):
         cursorObj = self.con.cursor()
-        cursorObj.execute(
-            "CREATE TABLE IF NOT EXISTS car_details(id integer PRIMARY KEY, car_id real, make_name text,model_name text,seating_capacity real, colour text, car_type text,registration_no real ,lat real ,lng real)")
-        cursorObj.execute(
-            "CREATE TABLE IF NOT EXISTS user_details(id integer PRIMARY KEY, username text, password text,customer_id ,face_id real)")
+
+        cursorObj.execute("""
+             DROP TABLE IF EXISTS user_details
+        """)
+
+        # Create a car details' TABLE in the local database
+        cursorObj.execute("""
+            CREATE TABLE IF NOT EXISTS car_details(
+                id integer PRIMARY KEY,
+                car_id real,
+                make_name text,
+                model_name text,
+                seating_capacity real, 
+                colour text, 
+                car_type text,
+                registration_no real,
+                lat real ,lng real)
+        """)
+
+        # Create a user details' TABLE in the local database
+        cursorObj.execute("""
+            CREATE TABLE IF NOT EXISTS user_details(
+                id integer PRIMARY KEY, 
+                username text, 
+                password text,
+                customer_id integer,
+                face_id real)
+        """)
         self.con.commit()
 
     def sql_insert_data(self):
         cursorObj = self.con.cursor()
-        cursorObj.execute(
-            "INSERT INTO car_details(car_id , make_name ,model_name ,seating_capacity, colour, car_type ,registration_no ,lat ,lng ) VALUES (1 ,'Sedan' ,'Toyota' ,4 ,'red' ,'suv' ,32 ,-9 ,-9 )")
-        cursorObj.execute(
-            "INSERT INTO user_details(username , password ,customer_id ,face_id) VALUES ('abc@gmail.com' ,'123' ,6 ,1)")
+        cursorObj.execute("INSERT INTO car_details(car_id , make_name ,model_name ,seating_capacity, colour, car_type ,registration_no ,lat ,lng ) VALUES (1 ,'Sedan' ,'Toyota' ,4 ,'red' ,'suv' ,32 ,-9 ,-9 )")
+        cursorObj.execute("INSERT INTO user_details(username , password ,customer_id ,face_id) VALUES ('john@gmail.com' ,'123' ,2 ,2)")
+        cursorObj.execute("INSERT INTO user_details(username , password ,customer_id ,face_id) VALUES ('anna@gmail.com' ,'123' ,3 ,1)")
+
+        # # Set 1 Car information that connected to 1 agent pi in the local database
+        # cursorObj.execute("""
+        #     INSERT INTO car_details(
+        #         car_id,
+        #         make_name,
+        #         model_name,
+        #         seating_capacity,
+        #         colour,
+        #         car_type,
+        #         registration_no,
+        #         lat,
+        #         lng)
+        #     VALUES (1, 'Sedan', 'Toyota', 4, 'red', 'suv', 32, -9, -9)
+        # """)
+        #
+        # # Set the default user information in the local database
+        # cursorObj.execute("""
+        #     INSERT INTO user_details(
+        #         username,
+        #         password,
+        #         customer_id,
+        #         face_id)
+        #     VALUES ('john@gmail.com', '123', 2, 1)
+        # """)
         self.con.commit()
 
     def update_car_location(self, lat, lng):

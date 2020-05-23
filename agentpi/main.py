@@ -117,7 +117,6 @@ while not connected:
                     recog = Recognition()
                     data = recog.start_recognition(status)
                     sock.sendall(str.encode(data))
-                    print(data)
                     time.sleep(10)
                     clear()
 
@@ -159,7 +158,6 @@ while not connected:
                     recog = Recognition()
                     data = recog.start_recognition(status)
                     sock.sendall(str.encode(data))
-                    print(data)
                     time.sleep(10)
                     clear()
 

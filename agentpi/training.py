@@ -11,7 +11,7 @@ RAW_FOLDER = os.getcwd() + '/data/raw/'
 def getImagesAndLabels():
     imagePaths = [os.path.join(RAW_FOLDER, f) for f in os.listdir(RAW_FOLDER)]
     faceSamples = []  # Initialize empty face sample
-    ids = []  # Initialize empty id
+    ids = []  # Initialize empty id list
     print("Training started!")
 
     # Loop all the file path
