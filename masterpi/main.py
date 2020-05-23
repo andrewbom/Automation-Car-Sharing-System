@@ -315,4 +315,4 @@ def map_bounded():
 if __name__ == "__main__":
     sv = ServerClass()
     sv.Serve()
-    app.run(debug=True)
+    app.run(debug=False)
