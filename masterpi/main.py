@@ -199,7 +199,7 @@ def search(carid=0, amount=0):
                 if conflict['count'] > 0:
 
                     # get the car by filtering out those booked car within that input period
-                    cars = db.get_all_available_car_type(int(car_make), int(car_type), int(car_colour), int(car_seat), str(pickup_date), str(return_date))
+                    cars = db.get_all_available_car_type(str(car_make), str(car_type), str(car_colour), str(car_seat), str(pickup_date), str(return_date))
 
                     if not cars:
                         flash("No cars available for your search range, Sorry!")
@@ -210,7 +210,7 @@ def search(carid=0, amount=0):
 
                 # if there is no conflict
                 else:
-                    cars = db.get_all_available_car_type(int(car_type), str(pickup_date), str(return_date))
+                    cars = db.get_all_available_car_type(str(car_make), str(car_type), str(car_colour), str(car_seat), str(pickup_date), str(return_date))
                     if not cars:
                         flash("No cars available for your search range, Sorry!")
                         return redirect(url_for('search'))
@@ -315,4 +315,4 @@ def map_bounded():
 if __name__ == "__main__":
     sv = ServerClass()
     sv.Serve()
-    app.run(debug=False)
+    app.run(debug=True)

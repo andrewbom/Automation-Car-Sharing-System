@@ -6,9 +6,9 @@ import math
 
 
 class DatabaseUtils:
-    HOST = "35.201.23.126"  # google cloud IP address
+    HOST = "34.87.232.2"  # google cloud IP address
     USER = "root"  # google cloud sql user name
-    PASSWORD = "andrewishandsome"  # google cloud sql password
+    PASSWORD = "123456789"  # google cloud sql password
     DATABASE = "Pythonlogin"
 
     def __init__(self, connection=None):
@@ -61,7 +61,7 @@ class DatabaseUtils:
                     `model_name` varchar(100) DEFAULT NULL,
                     `seating_capacity` varchar(1) DEFAULT NULL,
                     `colour` varchar(20) DEFAULT NULL,
-                    `car_type` int(1) DEFAULT NULL COMMENT '1:Sedan | 2:Hatch | 3:SUV',
+                    `car_type` varchar(20) DEFAULT NULL COMMENT '1:Sedan | 2:Hatch | 3:SUV',
                     `price_per_hour` decimal(10,2) NOT NULL,
                     `registration_no` varchar(10) DEFAULT NULL,
                     `status` varchar(15) NOT NULL,
@@ -71,11 +71,11 @@ class DatabaseUtils:
                     PRIMARY KEY (`car_id`)                    
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
             """)
-            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Toyota', 'Camry', '4', 'Red', 1, 15, "
+            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Toyota', 'Camry', '4', 'Red', 'Sedan', 15, "
                            "'Flinders', 'available' , -35.8183, 146.9671);")
-            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Mazda', 'CX-5', '4', 'Yellow', 3, 20, "
+            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Mazda', 'CX-5', '4', 'Yellow', 'SUV', 20, "
                            "'Box hills', 'available', -37.8181, 145.1239);")
-            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Nissan', 'Altima', '5', 'Black', 1, 10, "
+            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Nissan', 'Altima', '5', 'Black', 'Sedan', 10, "
                            "'North Melbourne', 'available', -37.7992, 144.9467);")
 
             cursor.execute("""
@@ -174,22 +174,21 @@ class DatabaseUtils:
 
     def get_all_available_car_type(self, car_make, car_type, car_colour, car_seat, pickup_date, return_date):
 
-        # subquery_car_make = ""
-        # if car_make != "":
-        #     subquery_car_make = " AND make_name = '" + car_make + "' "
-        #
-        # subquery_car_type = ""
-        # if car_type != "":
-        #     subquery_car_type = " AND car_type = '" + car_type + "' "
-        #
-        # subquery_colour = ""
-        # if colour != "":
-        #     subquery_colour = " AND colour = '" + colour + "' "
-        #
-        # subquery_seating_capacity = ""
-        # if seating_capacity != "":
-        #     subquery_seating_capacity = " AND seating_capacity = '" + seating_capacity + "' "
+        mainquery = "SELECT * FROM cars_list WHERE status = 'available' AND car_id NOT IN (SELECT car_id FROM bookings WHERE ( %s <= return_date AND %s >= pickup_date) OR ( %s <= return_date AND %s >= pickup_date))"
 
+        if car_make != "any":
+            mainquery += " AND make_name = '" + car_make + "' "
+
+        if car_type != "any":
+            mainquery += " AND car_type = '" + car_type + "' "
+
+        if car_colour != "any":
+            mainquery += " AND colour = '" + car_colour + "' "
+
+        if car_seat != "any":
+            mainquery += " AND seating_capacity = '" + car_seat + "' "
+
+        print(mainquery)
         pickup_oldformat = pickup_date
         pickup_datetimeobject = datetime.strptime(pickup_oldformat, '%d-%m-%Y')
         pickup_newformat = pickup_datetimeobject.strftime('%Y-%m-%d')
@@ -199,17 +198,20 @@ class DatabaseUtils:
         return_newformat = return_datetimeobject.strftime('%Y-%m-%d')
 
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("Select * "
-                       "from cars_list "
-                       "where "
-                       "status = 'available' "
-                       "AND car_type = %s "
-                       "AND car_id NOT IN ( "
-                       "    SELECT car_id "
-                       "    FROM bookings "
-                       "    WHERE ( %s <= return_date AND %s >= pickup_date) "
-                       "    OR( %s <= return_date AND %s >= pickup_date))",
-                       (car_type, pickup_newformat, return_newformat, pickup_newformat, return_newformat))
+        # cursor.execute("Select * "
+        #                "from cars_list "
+        #                "where "
+        #                "status = 'available' "
+        #                "AND car_type = %s "
+        #                "AND car_id NOT IN ( "
+        #                "    SELECT car_id "
+        #                "    FROM bookings "
+        #                "    WHERE ( %s <= return_date AND %s >= pickup_date) "
+        #                "    OR( %s <= return_date AND %s >= pickup_date))",
+        #                (car_type, pickup_newformat, return_newformat, pickup_newformat, return_newformat))
+
+
+        cursor.execute(mainquery, (pickup_newformat, return_newformat, pickup_newformat, return_newformat))
 
         return cursor.fetchall()
 

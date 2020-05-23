@@ -14,7 +14,7 @@
                             <div class="col-6">
                                 <label>Make</label>
                                 <select name="carMake" class="form-control">
-                                    <option value="0">Any</option>
+                                    <option value="any">Any</option>
                                     <option value="Toyota"{% if session['car_make'] == 'Toyota' %} selected="selected" {% endif %}>Toyota</option>
                                     <option value="Nissan"{% if session['car_make'] == 'Nissan' %} selected="selected" {% endif %}>Nissan</option>
                                     <option value="Mitsubishi"{% if session['car_make'] == 'Mitsubishi' %} selected="selected" {% endif %}>Mitsubishi</option>
@@ -23,10 +23,10 @@
                             <div class="col-6">
                                 <label>Car Type</label>
                                 <select name="carType" class="form-control">
-                                    <option value="0">Any</option>
-                                    <option value="1" {% if session['car_type'] == '1' %} selected="selected" {% endif %}>Sedan</option>
-                                    <option value="2" {% if session['car_type'] == '2' %} selected="selected" {% endif %}>Hatch</option>
-                                    <option value="3" {% if session['car_type'] == '3' %} selected="selected" {% endif %}>SUV</option>
+                                    <option value="any">Any</option>
+                                    <option value="Sedan" {% if session['car_type'] == 'Sedan' %} selected="selected" {% endif %}>Sedan</option>
+                                    <option value="Hatch" {% if session['car_type'] == 'Hatch' %} selected="selected" {% endif %}>Hatch</option>
+                                    <option value="SUV" {% if session['car_type'] == 'SUV' %} selected="selected" {% endif %}>SUV</option>
                                     <!-- <option value="1">Sedan</option>
                                     <option value="2">Hatch</option>
                                     <option value="3" selected="selected">SUV</option> -->
@@ -39,7 +39,7 @@
                             <div class="col-6">
                                 <label>Colour</label>
                                 <select name="carColor" class="form-control">
-                                    <option value="0">Any</option>
+                                    <option value="any">Any</option>
                                     <option value="Red" {% if session['car_colour'] == 'Red' %} selected="selected" {% endif %}>Red</option>
                                     <option value="Yellow" {% if session['car_colour'] == 'Yellow' %} selected="selected" {% endif %}>Yellow</option>
                                     <option value="Blue" {% if session['car_colour'] == 'Blue' %} selected="selected" {% endif %}>Blue</option>
@@ -49,7 +49,7 @@
                             <div class="col-6">
                                 <label>Seats</label>
                                 <select name="carSeat" class="form-control">
-                                    <option value="0">Any</option>
+                                    <option value="any">Any</option>
                                     <option value="4" {% if session['car_seat'] == '4' %} selected="selected" {% endif %}>4</option>
                                     <option value="5" {% if session['car_seat'] == '5' %} selected="selected" {% endif %}>5</option>
                                     <option value="6" {% if session['car_seat'] == '6' %} selected="selected" {% endif %}>6</option>
