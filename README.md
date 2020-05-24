@@ -44,6 +44,7 @@ Master Pi:
 3. pip3 install PyMySQL
 4. pip3 install passlib
 5. pip3 install socket
+6. pip3 install pip3 install google-api-python-client google-auth-httplib2 google-auth-oauthlib oauth2client httplib2
 
 Agent Pi:
 1. sudo apt-get purge wolfram-engine
