@@ -1,14 +1,22 @@
 import cv2
-import numpy as np
+from database_utils import Database_utils
 
 cam = cv2.VideoCapture(0)
 detector = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-Id = input('enter your id: ')
-username = input('enter your username: ')
+# prompt user input for account information
+name = input('enter your Name: ')
+email = input('enter your email: ')
+password = input('enter your password: ')
+customer_id = input('enter your customer id: ')
+face_id = customer_id  # face_id will be assigned same as customer_id
 sampleNum = 0
 
-while (True):
+# saving the user input to local database
+db = Database_utils()
+db.insert_account(email, password, customer_id, face_id)
+
+while True:
     ret, img = cam.read()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = detector.detectMultiScale(gray, 1.3, 5)
@@ -17,14 +25,14 @@ while (True):
         # incrementing sample number
         sampleNum = sampleNum + 1
         # saving the captured face in the dataset folder
-        cv2.imwrite("/home/pi/Projects/agentpi/data/raw/" + username + "." + Id + '.' + str(sampleNum) + ".jpg",
+        cv2.imwrite("/home/pi/Projects/agentpi/data/raw/" + name + "." + face_id + '.' + str(sampleNum) + ".jpg",
                     gray[y:y + h, x:x + w])
 
     cv2.imshow('frame', img)
     # wait for 100 miliseconds
     if cv2.waitKey(100) & 0xFF == ord('q'):
         break
-    # break if the sample number is morethan 20
+    # break if the sample number is more than 20
     elif sampleNum > 20:
         break
 

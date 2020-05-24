@@ -43,6 +43,7 @@ class Car_location:
         latitude = (data['location']['lat'])
         longitude = (data['location']['lng'])
 
+        # get the car information from local database
         db = Database_utils()
         cardata = db.get_car_data()
         car_id = cardata[1]
