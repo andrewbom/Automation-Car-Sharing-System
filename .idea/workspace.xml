@@ -21,10 +21,7 @@
   <component name="ChangeListManager">
     <list default="true" id="36e98ca0-a393-4975-8007-af639e323081" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/masterpi/client_secret.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/masterpi/database_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/database_utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/masterpi/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/masterpi/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/server.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
