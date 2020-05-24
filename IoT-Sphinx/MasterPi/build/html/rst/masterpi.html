@@ -1,0 +1,1039 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MAIN &mdash; Master Pi Sphinx 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Master Pi Sphinx
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">MAIN</a></li>
+<li><a class="reference internal" href="#server">SERVER</a></li>
+<li><a class="reference internal" href="#database-utils">DATABASE_UTILS</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Master Pi Sphinx</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>MAIN</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rst/masterpi.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="main">
+<h1>MAIN<a class="headerlink" href="#main" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<p>from flask import Flask, render_template, request, redirect, url_for, session, flash
+from calendar_api.calendar_api import google_calendar_api</p>
+<p>import datetime
+import pickle
+import os.path
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request</p>
+<p>import os
+from passlib.hash import sha256_crypt
+from flask_googlemaps import GoogleMaps, Map
+from database_utils import DatabaseUtils
+from datetime import datetime
+import re
+from server import ServerClass
+from decimal import Decimal</p>
+<dl class="simple">
+<dt>try:</dt><dd><p>import json</p>
+</dd>
+<dt>except ImportError:</dt><dd><p>import simplejson as json</p>
+</dd>
+</dl>
+<p>app = Flask(__name__)
+db = DatabaseUtils()
+db.create_account_table()</p>
+<p># you can set key as config
+app.config[‘GOOGLEMAPS_KEY’] = “AIzaSyA9CEaJcH6rooo1xohj-uE9ErU0KweRw-8”
+app.config[‘SECRET_KEY’] = ‘thisismysecretkey’</p>
+<p># Initialize Google map
+GoogleMaps(app)</p>
+<p># If modifying these scopes, delete the file token.pickle.
+SCOPES = [‘<a class="reference external" href="https://www.googleapis.com/auth/calendar.readonly">https://www.googleapis.com/auth/calendar.readonly</a>’]</p>
+<p># ——————————————–LOGIN PAGE—————————————————–</p>
+<p># <a class="reference external" href="http://localhost:5000/carrental/">http://localhost:5000/carrental/</a> - this will be the login page, we need to use both GET and POST requests
+&#64;app.route(‘/’)
+&#64;app.route(‘/carrental’, methods=[‘GET’, ‘POST’])
+def login():</p>
+<blockquote>
+<div><p># Output message if something goes wrong…
+msg = ‘’
+# Remove session data, this will log the user out
+session.clear()
+# Check if “username” and “password” POST requests exist (user submitted form)
+if request.method == ‘POST’:</p>
+<blockquote>
+<div><p># Create variables for easy access
+email = request.form[‘username’]
+password = request.form[‘password’]</p>
+<p># query the account from the database by passing the input username and password
+account = db.login_account(email)</p>
+<p># Check if the account exists in the accounts table of database
+# If account exists, redirect to home page
+if account:</p>
+<blockquote>
+<div><p># Verifying hashed Password
+if sha256_crypt.verify(password, account[‘password’]):</p>
+<blockquote>
+<div><p># Create session data, we can access these data in other routes
+session[‘loggedin’] = True
+session[‘id’] = account[‘customer_id’]
+session[‘firstname’] = account[‘first_name’]
+session[‘lastname’] = account[‘last_name’]
+session[‘email’] = account[‘email’]
+# Redirect to home page
+return redirect(url_for(‘home’))</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p># Account doesnt exist or username/password incorrect
+msg = ‘Incorrect username/passwords!’</p>
+</dd>
+</dl>
+</div></blockquote>
+<p># If account doesn’t exist, show the error message and pass it to index.html
+else:</p>
+<blockquote>
+<div><p># Account doesnt exist or username/password incorrect
+msg = ‘Incorrect username/password!’</p>
+</div></blockquote>
+</div></blockquote>
+<p># Show the login form with message (if any)
+return render_template(‘index.html’, msg=msg)</p>
+</div></blockquote>
+<p># ——————————————–LOGOUT PAGE—————————————————–</p>
+<p># <a class="reference external" href="http://localhost:5000/carrental/logout">http://localhost:5000/carrental/logout</a> - this will be the logout page
+&#64;app.route(‘/carrental/logout’)
+def logout():</p>
+<blockquote>
+<div><p># Remove session data, this will log the user out
+session.clear()
+# Redirect to the login page
+return redirect(url_for(‘login’))</p>
+</div></blockquote>
+<p># ——————————————–REGISTER PAGE—————————————————–</p>
+<p># <a class="reference external" href="http://localhost:5000/carrental/register">http://localhost:5000/carrental/register</a> - this will be the registration page,
+# we need to use both GET and POST requests
+&#64;app.route(‘/register’, methods=[‘GET’, ‘POST’])
+# &#64;app.route(‘/carrental/register’, methods=[‘GET’, ‘POST’])
+def register():</p>
+<blockquote>
+<div><p># Output message if something goes wrong
+msg = ‘’
+# Check if “username”, “password” and “email” POST requests exist (user submitted form)
+if request.method == ‘POST’:</p>
+<blockquote>
+<div><p># Create variables for easy access
+firstname = request.form[‘first_name’]
+lastname = request.form[‘last_name’]
+email = request.form[‘email’]
+password = request.form[‘password’]
+hashedpassword = sha256_crypt.using(rounds=1000).hash(password)</p>
+<p># check whether the email has already registered in the database
+account = db.get_an_user(email)</p>
+<p># If account exists show error and validation checks
+if account:</p>
+<blockquote>
+<div><p>msg = ‘Account with this email has already existed!’</p>
+</div></blockquote>
+<dl class="simple">
+<dt>elif not re.match(r’[^&#64;]+&#64;[^&#64;]+.[^&#64;]+’, email):</dt><dd><p>msg = ‘Invalid email address!’</p>
+</dd>
+<dt>elif not firstname or not lastname or not email or not password:</dt><dd><p>msg = ‘Please fill out the form!’</p>
+</dd>
+</dl>
+<p># if account doesn’t existed, show the successful message and back to the login page
+else:</p>
+<blockquote>
+<div><p>db.insert_account(firstname, lastname, email, hashedpassword)
+msg = ‘You have successfully registered!’
+return render_template(‘index.html’, msg=msg)</p>
+</div></blockquote>
+</div></blockquote>
+<p># Show registration form with message (if any)
+return render_template(‘register.html’, msg=msg)</p>
+</div></blockquote>
+<p># ——————————————–HOME PAGE—————————————————–</p>
+<p># <a class="reference external" href="http://localhost:5000/carrental/home">http://localhost:5000/carrental/home</a> - this will be the home page, only accessible for loggedin users
+&#64;app.route(‘/carrental/home’)
+def home():</p>
+<blockquote>
+<div><p># Check if user is loggedin
+if ‘loggedin’ in session:</p>
+<blockquote>
+<div><p># User is logged in show them the home page
+return render_template(‘home.html’, username=session[‘firstname’])</p>
+</div></blockquote>
+<p># User is not logged in and redirect to login page
+return redirect(url_for(‘login’))</p>
+</div></blockquote>
+<p># ——————————————–PROFILE PAGE—————————————————–</p>
+<p># <a class="reference external" href="http://localhost:5000/pythinlogin/profile">http://localhost:5000/pythinlogin/profile</a> - this will be the profile page, only accessible for logged in users
+&#64;app.route(‘/carrental/profile’)
+def profile():</p>
+<blockquote>
+<div><p># Check if user is logged in
+if ‘loggedin’ in session:</p>
+<blockquote>
+<div><p>account = db.get_an_user(session[‘email’])</p>
+<p># Show the profile page with account info
+return render_template(‘profile.html’, account=account, username=session[‘firstname’])</p>
+</div></blockquote>
+<p># User is not logged in redirect to login page
+return redirect(url_for(‘login’))</p>
+</div></blockquote>
+<p># ——————————————–SEARCH PAGE—————————————————–</p>
+<p># <a class="reference external" href="http://localhost:5000/carrental/search">http://localhost:5000/carrental/search</a> - this will be the search page, only accessible for logged in users
+&#64;app.route(‘/carrental/search’, methods=[‘GET’, ‘POST’])
+&#64;app.route(‘/carrental/search/&lt;carid&gt;/&lt;amount&gt;’)
+def search(carid=0, amount=0):</p>
+<blockquote>
+<div><p># Check if user is logged in and has filled the form
+if ‘loggedin’ in session:</p>
+<blockquote>
+<div><p>cars = []
+date_format = “%d-%m-%Y %H:%M”</p>
+<p># this if statement happens when the user click the “Search Now” button
+if request.method == ‘POST’:</p>
+<blockquote>
+<div><p># get the user input selection data from html file and set them into different variables
+car_make = request.form[‘carMake’]
+car_type = request.form[‘carType’]
+car_colour = request.form[‘carColor’]
+car_seat = request.form[‘carSeat’]
+pickup_date = request.form[‘pickupDate’]
+pickup_time = request.form[‘pickupTime’]
+return_date = request.form[‘returnDate’]
+return_time = request.form[‘returnTime’]</p>
+<p># Create session data, we can access these data in other routes
+if car_type or car_make or car_colour or car_seat:</p>
+<blockquote>
+<div><p>session[‘car_make’] = request.form[‘carMake’]
+session[‘car_type’] = request.form[‘carType’]
+session[‘car_colour’] = request.form[‘carColor’]
+session[‘car_seat’] = request.form[‘carSeat’]
+session[‘pickup_date’] = request.form[‘pickupDate’]
+session[‘pickup_time’] = request.form[‘pickupTime’]
+session[‘return_date’] = request.form[‘returnDate’]
+session[‘return_time’] = request.form[‘returnTime’]</p>
+<p># check the time
+date_one = datetime.strptime(pickup_date + ‘ ‘ + pickup_time, date_format)
+date_two = datetime.strptime(return_date + ‘ ‘ + return_time, date_format)
+days_diff = date_two - date_one
+get_hours = days_diff.total_seconds() / 60 ** 2</p>
+<p># Setting Renting Time Length and the display message
+session[‘renting_length’] = “Your renting time period is: ” + str(days_diff) + ” hours”</p>
+<p>conflict = db.check_booking_dates_conflict(str(pickup_date), str(return_date))
+print(conflict)</p>
+<p># check whether the car has been booked within the input time period
+# if yes, conflict[‘count’] will be greater than 0
+if conflict[‘count’] &gt; 0:</p>
+<blockquote>
+<div><p># get the car by filtering out those booked car within that input period
+cars = db.get_all_available_car_type(str(car_make), str(car_type), str(car_colour), str(car_seat), str(pickup_date), str(return_date))</p>
+<dl class="simple">
+<dt>if not cars:</dt><dd><p>flash(“No cars available for your search range, Sorry!”)
+return redirect(url_for(‘search’))</p>
+</dd>
+<dt>elif cars:</dt><dd><dl class="simple">
+<dt>for value in cars:</dt><dd><p>value[“price_total”] = float(value[“price_per_hour”]) * float(get_hours)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p># if there is no conflict
+else:</p>
+<blockquote>
+<div><p>cars = db.get_all_available_car_type(str(car_make), str(car_type), str(car_colour), str(car_seat), str(pickup_date), str(return_date))
+if not cars:</p>
+<blockquote>
+<div><p>flash(“No cars available for your search range, Sorry!”)
+return redirect(url_for(‘search’))</p>
+</div></blockquote>
+<dl class="simple">
+<dt>elif cars:</dt><dd><dl class="simple">
+<dt>for value in cars:</dt><dd><p>value[“price_total”] = float(value[“price_per_hour”]) * float(get_hours)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+</div></blockquote>
+<p># this if statement happens when user decides to book a car from the search result after the searching process
+if carid != 0:</p>
+<blockquote>
+<div><p># Need changes in the order
+db.insert_booking(session[‘id’], carid, session[‘pickup_date’], session[‘pickup_time’],</p>
+<blockquote>
+<div><p>session[‘return_date’], session[‘return_time’], ‘booked’, amount)</p>
+</div></blockquote>
+<p># Removing search query from the session
+session.pop(‘car_make’, None)
+session.pop(‘car_type’, None)
+session.pop(‘car_colour’, None)
+session.pop(‘car_seat’, None)
+session.pop(‘pickup_date’, None)
+session.pop(‘pickup_time’, None)
+session.pop(‘return_date’, None)
+session.pop(‘return_time’, None)
+session.pop(‘renting_length’, None)</p>
+<p>return redirect(url_for(‘bookinghistory’))</p>
+</div></blockquote>
+<p># this if statement happens every time before user entering to New Booking Page
+# Removing search query from the session
+if request.method != ‘POST’ and carid == 0:</p>
+<blockquote>
+<div><p>session.pop(‘car_make’, None)
+session.pop(‘car_type’, None)
+session.pop(‘car_colour’, None)
+session.pop(‘car_seat’, None)
+session.pop(‘pickup_date’, None)
+session.pop(‘pickup_time’, None)
+session.pop(‘return_date’, None)
+session.pop(‘return_time’, None)
+session.pop(‘renting_length’, None)</p>
+</div></blockquote>
+<p># reload the new_booking page with showing the searching result
+return render_template(‘new_booking.html’, username=session[‘firstname’], carlist=cars)</p>
+</div></blockquote>
+<p># User is not logged in and redirect to login page
+return redirect(url_for(‘login’))</p>
+</div></blockquote>
+<p># ——————————————–BOOKING HISTORY PAGE—————————————————–</p>
+<p># <a class="reference external" href="http://localhost:5000/carrental/bookinghistory">http://localhost:5000/carrental/bookinghistory</a> - this will be the booking history page,
+# only accessible for logged in users
+&#64;app.route(‘/carrental/bookinghistory’)
+&#64;app.route(‘/carrental/bookinghistory/&lt;bookingid&gt;’)
+def bookinghistory(bookingid=0):</p>
+<blockquote>
+<div><p># Check if user is loggedin
+if ‘loggedin’ in session:</p>
+<blockquote>
+<div><p>customerid = session[‘id’]</p>
+<p># check the booking history of logged in customer
+booking_history = db.get_customer_booking_history(customerid)</p>
+<dl class="simple">
+<dt>if bookingid != 0:</dt><dd><p>db.update_booking(bookingid, “booked”)
+booking_history = db.get_customer_booking_history(customerid)</p>
+</dd>
+</dl>
+<p># Show the Cars List
+return render_template(‘booking_history.html’, username=session[‘firstname’], history=booking_history)</p>
+</div></blockquote>
+<p># User is not logged in redirect to login page
+return redirect(url_for(‘login’))</p>
+</div></blockquote>
+<p># ——————————————–BOOKING HISTORY PAGE—————————————————–</p>
+<p>&#64;app.route(‘/carrental/location’)
+def map_bounded():</p>
+<blockquote>
+<div><p># Check if user is loggedin
+if ‘loggedin’ in session:</p>
+<blockquote>
+<div><p># creating a map in the view
+cars = db.get_all_car_location()
+print(cars)
+# getting car’s location information from cloud database
+location_detail = [{</p>
+<blockquote>
+<div><p>“infobox”: str(item[“infobox”]),
+“lat”: float(item[“lat”]),
+“lng”: float(item[“lng”])} for item in cars]</p>
+</div></blockquote>
+<p># initialize the google map page
+carsmap = Map(</p>
+<blockquote>
+<div><p>identifier=”carsmap”,
+lat=-37.8047,
+lng=144.9580,
+zoom=13,
+style=”height:1000px;width:100%;margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto”,
+markers=location_detail</p>
+</div></blockquote>
+<p>)
+return render_template(‘location.html’, carsmap=carsmap)</p>
+</div></blockquote>
+<p># User is not logged in and redirect to login page
+return redirect(url_for(‘login’))</p>
+</div></blockquote>
+<dl class="simple">
+<dt>if __name__ == “__main__”:</dt><dd><p>sv = ServerClass()
+sv.Serve()
+# port = int(os.environ.get(‘PORT’, 5000))
+# app.run(host=’127.0.0.1’, port=port, debug=False)
+app.run(debug=False)</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="server">
+<h1>SERVER<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<p>import socket
+import threading
+from database_utils import DatabaseUtils
+from passlib.hash import sha256_crypt</p>
+<dl class="simple">
+<dt>try:</dt><dd><p>import json</p>
+</dd>
+<dt>except ImportError:</dt><dd><p>import simplejson as json</p>
+</dd>
+</dl>
+<p># Variables for holding information about connections
+connections = []
+total_connections = 0
+db = DatabaseUtils()</p>
+<dl>
+<dt>class ServerClass:</dt><dd><p># Client class, new instance created for each connected client
+# Each instance has the socket and address that is associated with items
+# Along with an assigned ID and a name chosen by the client
+class Client(threading.Thread):</p>
+<blockquote>
+<div><dl class="simple">
+<dt>def __init__(self, socket, address, id, name, signal):</dt><dd><p>threading.Thread.__init__(self)
+self.socket = socket
+self.address = address
+self.id = id
+self.name = name
+self.signal = signal</p>
+</dd>
+<dt>def __str__(self):</dt><dd><p>return str(self.id) + ” ” + str(self.address)</p>
+</dd>
+</dl>
+<p># Attempt to get data from client
+# If unable to, assume client has disconnected and remove him from server data
+# If able to and we get data back, print it in the server and send it back to every
+# client aside from the client that has sent it
+# .decode is used to convert the byte data into a printable string</p>
+<dl>
+<dt>def run(self):</dt><dd><p># if there is a signal, run the following coding
+while self.signal:</p>
+<blockquote>
+<div><dl>
+<dt>try:</dt><dd><p># receiving the data from agent_pi
+data = self.socket.recv(200)</p>
+</dd>
+<dt>except:</dt><dd><p># show the message that signal is disconnected
+print(“Client ” + str(self.address) + ” has disconnected”)
+self.signal = False
+connections.remove(self)
+break</p>
+</dd>
+<dt>if data:</dt><dd><dl>
+<dt>try:</dt><dd><p>new_data = json.loads(data)
+print(“ID ” + str(self.id) + “: ” + str(data.decode(“utf-8”)))
+data_type = new_data[“type”]</p>
+<p># There will be 2 types of data that send by agent pi, they are: “credentials” and “location”
+# check if the data type is “credentials”
+if data_type == “credentials”:</p>
+<blockquote>
+<div><p># assigning the variables to the user account information that entered in the agent_pi
+username = new_data[“username”]
+password = new_data[“password”]
+customer_id = new_data[“customer_id”]
+car_id = new_data[“car_id”]</p>
+<p># checking whether the user account information of agent pi match that on cloud database
+user_data = db.login_account(username)</p>
+<p># if the account information successfully match that on cloud database
+if user_data is not None and sha256_crypt.verify(password, user_data[‘password’]):</p>
+<blockquote>
+<div><p># Request from agent pi for unlocking the car
+if new_data[“status”] == “collected”:</p>
+<blockquote>
+<div><p># validate whether the user has booked the car
+verify = db.validate_collection(customer_id, car_id)</p>
+<p># if verify successfully
+if verify is not None:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>for client in connections:</dt><dd><dl class="simple">
+<dt>if client.id == self.id:</dt><dd><p>client.socket.send(str.encode(“The Car has successfully unlocked.”))
+db.update_booking(verify[“booking_id”], new_data[“status”])</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p># if verify failed
+else:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>for client in connections:</dt><dd><dl class="simple">
+<dt>if client.id == self.id:</dt><dd><p>client.socket.send(str.encode(“Unlocking Denied”))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+<p># Request from agent pi for returning the car
+if new_data[“status”] == “returned”:</p>
+<blockquote>
+<div><p># validate whether the user has collected the car before
+verify = db.validate_return_car(customer_id, car_id)</p>
+<p># if verify successfully
+if verify is not None:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>for client in connections:</dt><dd><dl class="simple">
+<dt>if client.id == self.id:</dt><dd><p>client.socket.send(str.encode(“Car Return Successfully.”))
+# booking_status = new_data[“status”]
+db.update_booking(verify[“booking_id”], new_data[“status”])</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p># if verify failed
+else:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>for client in connections:</dt><dd><dl class="simple">
+<dt>if client.id == self.id:</dt><dd><p>client.socket.send(str.encode(“Car Return Denied”))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+</div></blockquote>
+<p># if the account information DOES NOT match that on cloud database
+else:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>for client in connections:</dt><dd><dl class="simple">
+<dt>if client.id == self.id:</dt><dd><p>client.socket.send(str.encode(“Username or password is incorrect”))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+<p># check if the data type is “location”
+elif data_type == “location”:</p>
+<blockquote>
+<div><p>car_id = new_data[“car_id”]
+longitude = new_data[“longitude”]
+latitude = new_data[“latitude”]
+db.update_car_location(car_id, latitude, longitude)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>elif data_type == “face recog fail”:</dt><dd><dl class="simple">
+<dt>for client in connections:</dt><dd><dl class="simple">
+<dt>if client.id == self.id:</dt><dd><p>client.socket.send(str.encode(“Facial Recognition fail.”))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p># if the received data from agent_pi cannot loaded properly
+except:</p>
+<blockquote>
+<div><p>pass</p>
+</div></blockquote>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</div></blockquote>
+<p># Wait for new connections
+def newConnections(self, socket):</p>
+<blockquote>
+<div><dl class="simple">
+<dt>while True:</dt><dd><p>sock, address = socket.accept()
+global total_connections
+connections.append(self.Client(sock, address, total_connections, “Name”, True))
+connections[len(connections) - 1].start()
+print(“New connection at ID ” + str(connections[len(connections) - 1]))
+total_connections += 1</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl>
+<dt>def Serve(self):</dt><dd><p># Create new server socket …. Ensure socket option is set to reusable address
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+sock.bind((“192.168.1.7”, 5001))
+sock.listen(5)</p>
+<p># Create new thread to wait for connections
+newConnectionsThread = threading.Thread(target=self.newConnections, args=(sock,))
+newConnectionsThread.start()</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="database-utils">
+<h1>DATABASE_UTILS<a class="headerlink" href="#database-utils" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<p>from passlib.hash import sha256_crypt
+from datetime import datetime
+import pymysql  # MySQLdb or pymysql both able to use</p>
+<dl>
+<dt>class DatabaseUtils:</dt><dd><p>HOST = “34.87.232.2”  # google cloud IP address
+USER = “root”  # google cloud sql user name
+PASSWORD = “123456789”  # google cloud sql password
+DATABASE = “Pythonlogin”</p>
+<dl>
+<dt>def __init__(self, connection=None):</dt><dd><dl class="simple">
+<dt>if connection is None:</dt><dd><dl class="simple">
+<dt>connection = pymysql.connect(DatabaseUtils.HOST, DatabaseUtils.USER,</dt><dd><p>DatabaseUtils.PASSWORD, DatabaseUtils.DATABASE)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>self.connection = connection</p>
+</dd>
+<dt>def close(self):</dt><dd><p>self.connection.close()</p>
+</dd>
+<dt>def __enter__(self):</dt><dd><p>return self</p>
+</dd>
+<dt>def __exit__(self, type, value, traceback):</dt><dd><p>self.close()</p>
+</dd>
+<dt>def create_account_table(self):</dt><dd><dl>
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“DROP TABLE IF EXISTS customers”)
+cursor.execute(“DROP TABLE IF EXISTS cars_list”)
+cursor.execute(“DROP TABLE IF EXISTS bookings”)</p>
+<p># Creating default password and converting to hashing
+hashedpassword = sha256_crypt.using(rounds=1000).hash(“123”)</p>
+<dl>
+<dt>cursor.execute(“””</dt><dd><dl class="simple">
+<dt>CREATE TABLE IF NOT EXISTS <cite>customers</cite> (</dt><dd><p><cite>customer_id</cite> int(11) NOT NULL AUTO_INCREMENT,
+<cite>first_name</cite> varchar(100) NOT NULL,
+<cite>last_name</cite> varchar(100) NOT NULL,
+<cite>email</cite> varchar(100) NOT NULL,
+<cite>password</cite> text NOT NULL,
+PRIMARY KEY (<cite>customer_id</cite>),
+UNIQUE(<cite>email</cite>),
+KEY <cite>id</cite> (<cite>customer_id</cite>)</p>
+</dd>
+</dl>
+<p>) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;</p>
+</dd>
+</dl>
+<p>“””)
+cursor.execute(</p>
+<blockquote>
+<div><p>“INSERT IGNORE INTO <cite>customers</cite> VALUES (NULL, ‘Wayne’, ‘Wayne’, <a class="reference external" href="mailto:'abc&#37;&#52;&#48;gmail&#46;com">‘abc<span>&#64;</span>gmail<span>&#46;</span>com</a>’, ‘” + hashedpassword + “’)”)</p>
+</div></blockquote>
+<dl>
+<dt>cursor.execute(</dt><dd><p>“INSERT IGNORE INTO <cite>customers</cite> VALUES (NULL, ‘John’, ‘Mathew’, <a class="reference external" href="mailto:'john&#37;&#52;&#48;gmail&#46;com">‘john<span>&#64;</span>gmail<span>&#46;</span>com</a>’, ‘” + hashedpassword + “’)”)</p>
+</dd>
+<dt>cursor.execute(</dt><dd><p>“INSERT IGNORE INTO <cite>customers</cite> VALUES (NULL, ‘Anna’, ‘Williams’, <a class="reference external" href="mailto:'anna&#37;&#52;&#48;gmail&#46;com">‘anna<span>&#64;</span>gmail<span>&#46;</span>com</a>’, ‘” + hashedpassword + “’)”)</p>
+</dd>
+<dt>cursor.execute(</dt><dd><p>“INSERT IGNORE INTO <cite>customers</cite> VALUES (NULL, ‘Harry’, ‘Robert’, <a class="reference external" href="mailto:'harry&#37;&#52;&#48;gmail&#46;com">‘harry<span>&#64;</span>gmail<span>&#46;</span>com</a>’, ‘” + hashedpassword + “’)”)</p>
+</dd>
+<dt>cursor.execute(</dt><dd><p>“INSERT IGNORE INTO <cite>customers</cite> VALUES (NULL, ‘Charlie’, ‘William’, <a class="reference external" href="mailto:'carlie&#37;&#52;&#48;gmail&#46;com">‘carlie<span>&#64;</span>gmail<span>&#46;</span>com</a>’, ‘” + hashedpassword + “’)”)</p>
+</dd>
+<dt>cursor.execute(</dt><dd><p>“INSERT IGNORE INTO <cite>customers</cite> VALUES (NULL, ‘Oliver’, ‘Michelle’, <a class="reference external" href="mailto:'oliver&#37;&#52;&#48;gmail&#46;com">‘oliver<span>&#64;</span>gmail<span>&#46;</span>com</a>’, ‘” + hashedpassword + “’)”)</p>
+</dd>
+<dt>cursor.execute(“””</dt><dd><dl class="simple">
+<dt>CREATE TABLE IF NOT EXISTS <cite>cars_list</cite> (</dt><dd><p><cite>car_id</cite> int(15) NOT NULL AUTO_INCREMENT,
+<cite>make_name</cite> varchar(100) NOT NULL,
+<cite>model_name</cite> varchar(100) DEFAULT NULL,
+<cite>seating_capacity</cite> varchar(1) DEFAULT NULL,
+<cite>colour</cite> varchar(20) DEFAULT NULL,
+<cite>car_type</cite> varchar(20) DEFAULT NULL COMMENT ‘1:Sedan | 2:Hatch | 3:SUV’,
+<cite>price_per_hour</cite> decimal(10,2) NOT NULL,
+<cite>registration_no</cite> varchar(10) DEFAULT NULL,
+<cite>status</cite> varchar(15) NOT NULL,
+<cite>latitude</cite> varchar(20)  NOT NULL,
+<cite>longitude</cite> varchar(20) NOT NULL,
+UNIQUE(<cite>registration_no</cite>),
+PRIMARY KEY (<cite>car_id</cite>)</p>
+</dd>
+</dl>
+<p>) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;</p>
+</dd>
+</dl>
+<p>“””)
+cursor.execute(“INSERT IGNORE INTO <cite>cars_list</cite> VALUES (NULL, ‘Toyota’, ‘Camry’, ‘4’, ‘Red’, ‘Sedan’, 15, “</p>
+<blockquote>
+<div><p>“‘Flinders’, ‘available’ , -35.8183, 146.9671);”)</p>
+</div></blockquote>
+<dl>
+<dt>cursor.execute(“INSERT IGNORE INTO <cite>cars_list</cite> VALUES (NULL, ‘Mazda’, ‘CX-5’, ‘4’, ‘Yellow’, ‘SUV’, 20, “</dt><dd><p>“‘Box hills’, ‘available’, -37.8181, 145.1239);”)</p>
+</dd>
+<dt>cursor.execute(</dt><dd><p>“INSERT IGNORE INTO <cite>cars_list</cite> VALUES (NULL, ‘Nissan’, ‘Altima’, ‘5’, ‘Black’, ‘Sedan’, 10, ”
+“‘North Melbourne’, ‘available’, -37.7992, 144.9467);”)</p>
+</dd>
+<dt>cursor.execute(“””</dt><dd><dl class="simple">
+<dt>CREATE TABLE IF NOT EXISTS <cite>bookings</cite> (</dt><dd><p><cite>booking_id</cite> int(11) NOT NULL AUTO_INCREMENT,
+<cite>customer_id</cite> int(11) NOT NULL,
+<cite>car_id</cite> int(11) NOT NULL,
+<cite>pickup_date</cite> DATE NOT NULL,
+<cite>pickup_time</cite> varchar(30) NOT NULL,
+<cite>return_date</cite> DATE NOT NULL,
+<cite>return_time</cite> varchar(30) NOT NULL,
+<cite>booking_amount</cite> decimal(10,2) NOT NULL,
+<cite>booking_status</cite> varchar(30) NOT NULL,
+<cite>canceled_date_time</cite> timestamp NULL DEFAULT NULL,
+PRIMARY KEY (<cite>booking_id</cite>)</p>
+</dd>
+</dl>
+<p>) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;</p>
+</dd>
+</dl>
+<p>“””)</p>
+</dd>
+</dl>
+<p>self.connection.commit()</p>
+</dd>
+<dt>def insert_account(self, firstname, lastname, email, password):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><dl class="simple">
+<dt>cursor.execute(“INSERT INTO customers VALUES (NULL, %s, %s, %s, %s)”,</dt><dd><p>(firstname, lastname, email, password))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>self.connection.commit()</p>
+</dd>
+<dt>def login_account(self, email):</dt><dd><p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(“SELECT * FROM customers WHERE email = %s”, (email))</p>
+<p>return cursor.fetchone()</p>
+</dd>
+<dt>def get_an_user(self, email):</dt><dd><p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(“SELECT * FROM customers WHERE email = %s”, email)</p>
+<p>return cursor.fetchone()</p>
+</dd>
+<dt>def get_all_available_cars(self):</dt><dd><p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(“SELECT * FROM cars_list WHERE status = ‘available’”)</p>
+<p>return cursor.fetchall()</p>
+</dd>
+</dl>
+<p># show a list of cars that current user has booked
+def get_customer_booking_history(self, customer_id):</p>
+<blockquote>
+<div><p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(“SELECT b.booking_id, c.first_name, c.last_name, b.pickup_date, b.return_date, b.pickup_time, “</p>
+<blockquote>
+<div><p>“b.booking_amount, b.booking_status, cl.make_name, cl.model_name ”
+“FROM customers c ”
+“JOIN bookings b on c.customer_id = b.customer_id JOIN ”
+“cars_list cl on b.car_id = cl.car_id ”
+“WHERE c.customer_id = %s ”
+“ORDER BY b.pickup_date DESC”,
+customer_id)</p>
+</div></blockquote>
+<p>return cursor.fetchall()</p>
+</div></blockquote>
+<dl>
+<dt>def check_booking_dates_conflict(self, pickup_date, return_date):</dt><dd><p>conflicts_arr = {}</p>
+<p># Reformatting the datetime data of pickup_date and return_date
+pickup_oldformat = pickup_date
+pickup_datetimeobject = datetime.strptime(pickup_oldformat, ‘%d-%m-%Y’)
+pickup_newformat = pickup_datetimeobject.strftime(‘%Y-%m-%d’)</p>
+<p>return_oldformat = return_date
+return_datetimeobject = datetime.strptime(return_oldformat, ‘%d-%m-%Y’)
+return_newformat = return_datetimeobject.strftime(‘%Y-%m-%d’)</p>
+<p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(</p>
+<blockquote>
+<div><p>“SELECT car_id FROM bookings WHERE (%s &lt;= return_date AND %s &gt;= pickup_date) OR (%s &lt;= return_date ”
+“AND %s &gt;= pickup_date)”,
+(pickup_newformat, return_newformat, pickup_newformat, return_newformat))</p>
+</div></blockquote>
+<p>count = cursor.rowcount</p>
+<dl class="simple">
+<dt>if count &gt; 0:</dt><dd><p>conflicts_arr[‘count’] = count
+conflicts_arr[‘cars’] = cursor.fetchall()</p>
+</dd>
+<dt>else:</dt><dd><p>conflicts_arr[‘count’] = count
+conflicts_arr[‘cars’] = ‘’</p>
+</dd>
+</dl>
+<p>return conflicts_arr</p>
+</dd>
+</dl>
+<p>def get_all_available_car_type(self, car_make, car_type, car_colour, car_seat, pickup_date, return_date):</p>
+<blockquote>
+<div><p>mainquery = “SELECT * FROM cars_list WHERE status = ‘available’ AND car_id NOT IN (SELECT car_id FROM bookings WHERE ( %s &lt;= return_date AND %s &gt;= pickup_date) OR ( %s &lt;= return_date AND %s &gt;= pickup_date))”</p>
+<dl class="simple">
+<dt>if car_make != “any”:</dt><dd><p>mainquery += ” AND make_name = ‘” + car_make + “’ “</p>
+</dd>
+<dt>if car_type != “any”:</dt><dd><p>mainquery += ” AND car_type = ‘” + car_type + “’ “</p>
+</dd>
+<dt>if car_colour != “any”:</dt><dd><p>mainquery += ” AND colour = ‘” + car_colour + “’ “</p>
+</dd>
+<dt>if car_seat != “any”:</dt><dd><p>mainquery += ” AND seating_capacity = ‘” + car_seat + “’ “</p>
+</dd>
+</dl>
+<p>pickup_oldformat = pickup_date
+pickup_datetimeobject = datetime.strptime(pickup_oldformat, ‘%d-%m-%Y’)
+pickup_newformat = pickup_datetimeobject.strftime(‘%Y-%m-%d’)</p>
+<p>return_oldformat = return_date
+return_datetimeobject = datetime.strptime(return_oldformat, ‘%d-%m-%Y’)
+return_newformat = return_datetimeobject.strftime(‘%Y-%m-%d’)</p>
+<p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(mainquery, (pickup_newformat, return_newformat, pickup_newformat, return_newformat))</p>
+<p>return cursor.fetchall()</p>
+</div></blockquote>
+<dl>
+<dt>def insert_booking(self, customer_id, car_id, pickupDate, piuckup_time, returnDate, return_time, booking_status,</dt><dd><blockquote>
+<div><p>booking_amount):</p>
+</div></blockquote>
+<dl>
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>pickup_oldformat = pickupDate
+pickup_datetimeobject = datetime.strptime(pickup_oldformat, ‘%d-%m-%Y’)
+pickup_newformat = pickup_datetimeobject.strftime(‘%Y-%m-%d’)</p>
+<p>return_oldformat = returnDate
+return_datetimeobject = datetime.strptime(return_oldformat, ‘%d-%m-%Y’)
+return_newformat = return_datetimeobject.strftime(‘%Y-%m-%d’)</p>
+<dl>
+<dt>cursor.execute(</dt><dd><p>“insert into bookings (customer_id, car_id, pickup_date, pickup_time, return_date, return_time, booking_status, booking_amount) values (%s,%s,%s,%s,%s,%s,%s,%s)”,
+(customer_id, car_id, pickup_newformat, str(piuckup_time), return_newformat, str(return_time),</p>
+<blockquote>
+<div><p>booking_status, booking_amount))</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>self.connection.commit()</p>
+</dd>
+<dt>def update_booking(self, bookingid, booking_status):</dt><dd><p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(“UPDATE bookings “</p>
+<blockquote>
+<div><p>“SET booking_status = %s ”
+“WHERE booking_id = %s”,
+(booking_status, bookingid))</p>
+</div></blockquote>
+<p>self.connection.commit()</p>
+</dd>
+</dl>
+<p># validate whether the user has booked the car and fetch that information
+def validate_collection(self, customer_id, car_id):</p>
+<blockquote>
+<div><p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(“Select * “</p>
+<blockquote>
+<div><p>“from bookings ”
+“where ”
+“customer_id = %s ”
+“AND car_id = %s ”
+“AND booking_status = ‘booked’”,
+(customer_id, car_id))</p>
+</div></blockquote>
+<p>return cursor.fetchone()</p>
+</div></blockquote>
+<p># validate whether the user has collected the car and fetch that information
+def validate_return_car(self, customer_id, car_id):</p>
+<blockquote>
+<div><p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(“Select * “</p>
+<blockquote>
+<div><p>“from bookings ”
+“where ”
+“customer_id = %s ”
+“AND car_id = %s ”
+“AND booking_status = ‘collected’”,
+(customer_id, car_id))</p>
+</div></blockquote>
+<p>return cursor.fetchone()</p>
+</div></blockquote>
+<dl>
+<dt>def get_all_car_location(self):</dt><dd><p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(“Select <cite>registration_no</cite> as <cite>infobox</cite>,`latitude` as <cite>lat</cite>,`longitude` as <cite>lng</cite>”</p>
+<blockquote>
+<div><p>“from cars_list “)</p>
+</div></blockquote>
+<p>return cursor.fetchall()</p>
+</dd>
+<dt>def update_car_location(self, car_id, latitude, longitude):</dt><dd><p>cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+cursor.execute(“UPDATE cars_list “</p>
+<blockquote>
+<div><p>“SET latitude = %s ,”
+“longitude = %s ”
+“WHERE car_id = %s “,
+(latitude, longitude, car_id))</p>
+</div></blockquote>
+<p>self.connection.commit()</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Hao Li
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
