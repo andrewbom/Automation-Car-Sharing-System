@@ -1,4 +1,10 @@
 # IOT_Assignment_2
+Student Number:
+1)	s3725715 - ChunPong Chong
+2)	s3691925 - Hao Li
+3)	s3675054 - Serkan Karasalihoglu
+4)	s3693595 - Mohamed Nazran
+
 
           ------------------------------Scenario------------------------------
 
