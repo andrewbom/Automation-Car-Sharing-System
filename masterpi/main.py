@@ -1,5 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from calendar_api.calendar_api import google_calendar_api
+
+import datetime
+import pickle
+import os.path
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+
+
+import os
 from passlib.hash import sha256_crypt
 from flask_googlemaps import GoogleMaps, Map
 from database_utils import DatabaseUtils
@@ -23,6 +33,10 @@ app.config['SECRET_KEY'] = 'thisismysecretkey'
 
 # Initialize Google map
 GoogleMaps(app)
+
+# If modifying these scopes, delete the file token.pickle.
+SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+
 
 
 # --------------------------------------------LOGIN PAGE-----------------------------------------------------
@@ -251,11 +265,48 @@ def search(carid=0, amount=0):
             session.pop('return_time', None)
             session.pop('renting_length', None)
 
-        m = google_calendar_api()
-        m.create_event(calendar_id='<your calendar id>',
-                       start='2017,12,5,15,00,00',
-                       end='2017,12,5,15,15,00'
-        description = 'foo')
+
+
+        """Shows basic usage of the Google Calendar API.
+            Prints the start and name of the next 10 events on the user's calendar.
+            """
+        creds = None
+        # The file token.pickle stores the user's access and refresh tokens, and is
+        # created automatically when the authorization flow completes for the first
+        # time.
+        if os.path.exists('token.pickle'):
+            with open('token.pickle', 'rb') as token:
+                creds = pickle.load(token)
+        # If there are no (valid) credentials available, let the user log in.
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    'credentials.json', SCOPES)
+                creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            with open('token.pickle', 'wb') as token:
+                pickle.dump(creds, token)
+
+        service = build('calendar', 'v3', credentials=creds)
+
+        # Call the Calendar API
+        now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+        print('Getting the upcoming 10 events')
+        events_result = service.events().list(calendarId='primary', timeMin=now,
+                                              maxResults=10, singleEvents=True,
+                                              orderBy='startTime').execute()
+        events = events_result.get('items', [])
+
+        if not events:
+            print('No upcoming events found.')
+        for event in events:
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            print(start, event['summary'])
+
+
+
 
         # reload the new_booking page with showing the searching result
         return render_template('new_booking.html', username=session['firstname'], carlist=cars)
@@ -322,4 +373,6 @@ def map_bounded():
 if __name__ == "__main__":
     sv = ServerClass()
     sv.Serve()
-    app.run(debug=False)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='127.0.0.1', port=port, debug=False)
+    #app.run(debug=False)

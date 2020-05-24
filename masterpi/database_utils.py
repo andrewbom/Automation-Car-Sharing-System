@@ -6,9 +6,9 @@ import math
 
 
 class DatabaseUtils:
-    HOST = "35.201.23.126"  # google cloud IP address
+    HOST = "34.87.232.2"  # google cloud IP address
     USER = "root"  # google cloud sql user name
-    PASSWORD = "andrewishandsome"  # google cloud sql password
+    PASSWORD = "123456789"  # google cloud sql password
     DATABASE = "Pythonlogin"
 
     def __init__(self, connection=None):
