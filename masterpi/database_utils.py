@@ -140,9 +140,6 @@ class DatabaseUtils:
         return cursor.fetchall()
 
     def check_booking_dates_conflict(self, pickup_date, return_date):
-        print(pickup_date)
-        print(return_date)
-
         conflicts_arr = {}
 
         # Reformatting the datetime data of pickup_date and return_date
@@ -167,7 +164,6 @@ class DatabaseUtils:
         else:
             conflicts_arr['count'] = count
             conflicts_arr['cars'] = ''
-        # print(count)
         # cursor.execute("SELECT * FROM bookings WHERE (%s <= return_date AND %s >= pickup_date) OR (%s <= return_date AND %s >= pickup_date)", (pickup_newformat, return_newformat, pickup_newformat, return_newformat))
 
         return conflicts_arr
@@ -188,7 +184,6 @@ class DatabaseUtils:
         if car_seat != "any":
             mainquery += " AND seating_capacity = '" + car_seat + "' "
 
-        print(mainquery)
         pickup_oldformat = pickup_date
         pickup_datetimeobject = datetime.strptime(pickup_oldformat, '%d-%m-%Y')
         pickup_newformat = pickup_datetimeobject.strftime('%Y-%m-%d')

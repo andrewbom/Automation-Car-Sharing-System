@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from calendar_api.calendar_api import google_calendar_api
 from passlib.hash import sha256_crypt
 from flask_googlemaps import GoogleMaps, Map
 from database_utils import DatabaseUtils
@@ -249,6 +250,12 @@ def search(carid=0, amount=0):
             session.pop('return_date', None)
             session.pop('return_time', None)
             session.pop('renting_length', None)
+
+        m = google_calendar_api()
+        m.create_event(calendar_id='<your calendar id>',
+                       start='2017,12,5,15,00,00',
+                       end='2017,12,5,15,15,00'
+        description = 'foo')
 
         # reload the new_booking page with showing the searching result
         return render_template('new_booking.html', username=session['firstname'], carlist=cars)
