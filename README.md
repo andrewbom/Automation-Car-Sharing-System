@@ -22,13 +22,11 @@ The system involves 2 Raspberry Pi by communicating to each other for unlocking 
 1) Run the file capture.py to capture the images of your face - it will automatically save in /data/raw with the correct filename format.
 2) Run the file training.py to train the recognition model with the captured images that are stored in /data/raw folder. After successfully training, the images will be automatically moved to /data/dataset
 3) If you want to train with other images that is not captured by the Agent Pi.
-images should be preferably png (the more different images per face the more accurate the model)
-image label become the person id
-
-images labels should follow the following example
-example: person with id = 1
-  mary.1.1.png
-  mary.1.2.png
+images should be preferably jpg (the more different images per face the more accurate the model) - image label become the face id
+4) images labels should follow the following example
+  person with id = 1
+  mary.1.1.jpg
+  mary.1.2.jpg
   . 
   .  
 
