@@ -48,7 +48,7 @@ def login():
         # If account exists, redirect to home page
         if account:
             # Verifying hashed Password
-            if (sha256_crypt.verify(password, account['password'])):
+            if sha256_crypt.verify(password, account['password']):
                 # Create session data, we can access these data in other routes
                 session['loggedin'] = True
                 session['id'] = account['customer_id']
@@ -322,4 +322,4 @@ def map_bounded():
 if __name__ == "__main__":
     sv = ServerClass()
     sv.Serve()
-    app.run(debug=True)
+    app.run(debug=False)

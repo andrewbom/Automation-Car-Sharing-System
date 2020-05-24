@@ -1,7 +1,7 @@
 import socket
 import threading
 from database_utils import DatabaseUtils
-import math
+from passlib.hash import sha256_crypt
 
 try:
     import json
@@ -66,10 +66,10 @@ class ServerClass:
                             car_id = new_data["car_id"]
 
                             # checking whether the user account information of agent pi match that on cloud database
-                            user_data = db.login_account(username, password)
+                            user_data = db.login_account(username)
 
-                            # if the account information match that on cloud database
-                            if user_data is not None:
+                            # if the account information successfully match that on cloud database
+                            if user_data is not None and sha256_crypt.verify(password, user_data['password']):
 
                                 # Request from agent pi for unlocking the car
                                 if new_data["status"] == "collected":
@@ -124,7 +124,6 @@ class ServerClass:
                                 if client.id == self.id:
                                     client.socket.send(str.encode("Facial Recognition fail."))
 
-
                     # if the received data from agent_pi cannot loaded properly
                     except:
                         pass
@@ -143,8 +142,8 @@ class ServerClass:
         # Create new server socket .... Ensure socket option is set to reusable address   
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        sock.bind(("192.168.1.7", 5001))
-        # sock.listen(5)
+        sock.bind(("192.168.0.3", 5001))
+        sock.listen(5)
 
         # Create new thread to wait for connections
         newConnectionsThread = threading.Thread(target=self.newConnections, args=(sock,))

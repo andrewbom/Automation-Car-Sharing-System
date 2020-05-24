@@ -6,9 +6,9 @@ import math
 
 
 class DatabaseUtils:
-    HOST = "34.87.232.2"  # google cloud IP address
+    HOST = "35.201.23.126"  # google cloud IP address
     USER = "root"  # google cloud sql user name
-    PASSWORD = "123456789"  # google cloud sql password
+    PASSWORD = "andrewishandsome"  # google cloud sql password
     DATABASE = "Pythonlogin"
 
     def __init__(self, connection=None):
@@ -47,12 +47,18 @@ class DatabaseUtils:
                     KEY `id` (`customer_id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
             """)
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Wayne', 'Wayne', 'abc@gmail.com', '" + hashedpassword + "')")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'John', 'Mathew', 'john@gmail.com', '" + hashedpassword + "')")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Anna', 'Williams', 'anna@gmail.com', '" + hashedpassword + "')")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Harry', 'Robert', 'harry@gmail.com', '" + hashedpassword + "')")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Charlie', 'William', 'carlie@gmail.com', '" + hashedpassword + "')")
-            cursor.execute("INSERT IGNORE INTO `customers` VALUES (NULL, 'Oliver', 'Michelle', 'oliver@gmail.com', '" + hashedpassword + "')")
+            cursor.execute(
+                "INSERT IGNORE INTO `customers` VALUES (NULL, 'Wayne', 'Wayne', 'abc@gmail.com', '" + hashedpassword + "')")
+            cursor.execute(
+                "INSERT IGNORE INTO `customers` VALUES (NULL, 'John', 'Mathew', 'john@gmail.com', '" + hashedpassword + "')")
+            cursor.execute(
+                "INSERT IGNORE INTO `customers` VALUES (NULL, 'Anna', 'Williams', 'anna@gmail.com', '" + hashedpassword + "')")
+            cursor.execute(
+                "INSERT IGNORE INTO `customers` VALUES (NULL, 'Harry', 'Robert', 'harry@gmail.com', '" + hashedpassword + "')")
+            cursor.execute(
+                "INSERT IGNORE INTO `customers` VALUES (NULL, 'Charlie', 'William', 'carlie@gmail.com', '" + hashedpassword + "')")
+            cursor.execute(
+                "INSERT IGNORE INTO `customers` VALUES (NULL, 'Oliver', 'Michelle', 'oliver@gmail.com', '" + hashedpassword + "')")
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS `cars_list` (
@@ -75,8 +81,9 @@ class DatabaseUtils:
                            "'Flinders', 'available' , -35.8183, 146.9671);")
             cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Mazda', 'CX-5', '4', 'Yellow', 'SUV', 20, "
                            "'Box hills', 'available', -37.8181, 145.1239);")
-            cursor.execute("INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Nissan', 'Altima', '5', 'Black', 'Sedan', 10, "
-                           "'North Melbourne', 'available', -37.7992, 144.9467);")
+            cursor.execute(
+                "INSERT IGNORE INTO `cars_list` VALUES (NULL, 'Nissan', 'Altima', '5', 'Black', 'Sedan', 10, "
+                "'North Melbourne', 'available', -37.7992, 144.9467);")
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS `bookings` (
@@ -112,6 +119,12 @@ class DatabaseUtils:
         cursor.execute("SELECT * FROM customers WHERE email = %s", (email))
 
         return cursor.fetchone()
+
+    # def agent_login_account(self, email, password):
+    #     cursor = self.connection.cursor(pymysql.cursors.DictCursor)
+    #     cursor.execute("SELECT * FROM customers WHERE email = %s AND password = %s", (email, password))
+    #
+    #     return cursor.fetchone()
 
     def get_an_user(self, email):
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
@@ -204,7 +217,6 @@ class DatabaseUtils:
         #                "    WHERE ( %s <= return_date AND %s >= pickup_date) "
         #                "    OR( %s <= return_date AND %s >= pickup_date))",
         #                (car_type, pickup_newformat, return_newformat, pickup_newformat, return_newformat))
-
 
         cursor.execute(mainquery, (pickup_newformat, return_newformat, pickup_newformat, return_newformat))
 
