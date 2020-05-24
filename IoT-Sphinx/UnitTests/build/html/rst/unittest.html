@@ -1,0 +1,626 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>TEST_DATABASEUTILS(MP) &mdash; Unit Tests Sphinx 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Welcome to Unit Tests Sphinx’s documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Unit Tests Sphinx
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">TEST_DATABASEUTILS(MP)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#test-ui">TEST_UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#test-agent-database">TEST_AGENT_DATABASE</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Unit Tests Sphinx</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>TEST_DATABASEUTILS(MP)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rst/unittest.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="test-databaseutils-mp">
+<h1>TEST_DATABASEUTILS(MP)<a class="headerlink" href="#test-databaseutils-mp" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<p>from datetime import datetime
+import pymysql  # MySQLdb  # pymysql
+import math
+import unittest
+from database_utils import DatabaseUtils</p>
+<dl>
+<dt>class TestDatabaseUtils(unittest.TestCase):</dt><dd><p>HOST = “35.201.23.126”  # google cloud IP address
+USER = “root”  # google cloud sql user name
+PASSWORD = “andrewishandsome”  # google cloud sql password
+DATABASE = “Pythonlogin”</p>
+<dl>
+<dt>def setUp(self):</dt><dd><dl>
+<dt>self.connection = pymysql.connect(TestDatabaseUtils.HOST, TestDatabaseUtils.USER,</dt><dd><p>TestDatabaseUtils.PASSWORD, TestDatabaseUtils.DATABASE)</p>
+</dd>
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“DROP TABLE IF EXISTS customers”)
+cursor.execute(“DROP TABLE IF EXISTS cars_list”)
+cursor.execute(“DROP TABLE IF EXISTS bookings”)</p>
+<dl>
+<dt>cursor.execute(“””</dt><dd><dl class="simple">
+<dt>CREATE TABLE IF NOT EXISTS <cite>customers</cite> (</dt><dd><p><cite>customer_id</cite> int(11) NOT NULL AUTO_INCREMENT,
+<cite>first_name</cite> varchar(100) NOT NULL,
+<cite>last_name</cite> varchar(100) NOT NULL,
+<cite>email</cite> varchar(100) NOT NULL,
+<cite>password</cite> varchar(50) NOT NULL,
+PRIMARY KEY (<cite>customer_id</cite>),
+UNIQUE(<cite>email</cite>),
+KEY <cite>id</cite> (<cite>customer_id</cite>)</p>
+</dd>
+</dl>
+<p>) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;</p>
+</dd>
+</dl>
+<p>“””)
+cursor.execute(</p>
+<blockquote>
+<div><p>“INSERT IGNORE INTO <cite>customers</cite> VALUES (NULL, ‘Wayne’, ‘Wayne’, <a class="reference external" href="mailto:'abc&#37;&#52;&#48;gmail&#46;com">‘abc<span>&#64;</span>gmail<span>&#46;</span>com</a>’,’123’);”)  # custome_id = 1</p>
+</div></blockquote>
+<dl>
+<dt>cursor.execute(</dt><dd><p>“INSERT IGNORE INTO <cite>customers</cite> VALUES (NULL, ‘Mary’, ‘Mary’, <a class="reference external" href="mailto:'xyz&#37;&#52;&#48;gmail&#46;com">‘xyz<span>&#64;</span>gmail<span>&#46;</span>com</a>’,’123’);”)  # custome_id = 2</p>
+</dd>
+<dt>cursor.execute(“””</dt><dd><dl class="simple">
+<dt>CREATE TABLE IF NOT EXISTS <cite>cars_list</cite> (</dt><dd><p><cite>car_id</cite> int(15) NOT NULL AUTO_INCREMENT,
+<cite>make_name</cite> varchar(100) NOT NULL,
+<cite>model_name</cite> varchar(100) DEFAULT NULL,
+<cite>seating_capacity</cite> varchar(1) DEFAULT NULL,
+<cite>colour</cite> varchar(20) DEFAULT NULL,
+<cite>car_type</cite> int(1) DEFAULT NULL COMMENT ‘1:Sedan | 2:Hatch | 3:SUV’,
+<cite>price_per_hour</cite> decimal(10,2) NOT NULL,
+<cite>registration_no</cite> varchar(10) DEFAULT NULL,
+<cite>status</cite> varchar(15) NOT NULL,
+<cite>latitude</cite> decimal(40,15) NOT NULL,
+<cite>longitude</cite> decimal(40,15) NOT NULL,
+UNIQUE(<cite>registration_no</cite>),
+PRIMARY KEY (<cite>car_id</cite>)</p>
+</dd>
+</dl>
+<p>) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;</p>
+</dd>
+</dl>
+<p>“””)
+cursor.execute(</p>
+<blockquote>
+<div><p>“INSERT IGNORE INTO <cite>cars_list</cite> VALUES (NULL, ‘Toyota’, ‘Camry’, ‘4’, ‘Red’, 1, 15, ”  # car_id = 1
+“‘1AB 2CD’, ‘available’ , 37  , 95.6 );”)</p>
+</div></blockquote>
+<dl>
+<dt>cursor.execute(</dt><dd><p>“INSERT IGNORE INTO <cite>cars_list</cite> VALUES (NULL, ‘Nissan’, ‘Sunny’, ‘4’, ‘Blue’, 1, 15, ”  # car_id = 2
+“‘1AB 2AB’, ‘available’ , 37  , 95.6 );”)</p>
+</dd>
+<dt>cursor.execute(“””</dt><dd><dl class="simple">
+<dt>CREATE TABLE IF NOT EXISTS <cite>bookings</cite> (</dt><dd><p><cite>booking_id</cite> int(11) NOT NULL AUTO_INCREMENT,
+<cite>customer_id</cite> int(11) NOT NULL,
+<cite>car_id</cite> int(11) NOT NULL,
+<cite>pickup_date</cite> DATE NOT NULL,
+<cite>pickup_time</cite> varchar(30) NOT NULL,
+<cite>return_date</cite> DATE NOT NULL,
+<cite>return_time</cite> varchar(30) NOT NULL,
+<cite>booking_amount</cite> decimal(10,2) NOT NULL,
+<cite>booking_status</cite> varchar(30) NOT NULL,
+<cite>canceled_date_time</cite> timestamp NULL DEFAULT NULL,
+PRIMARY KEY (<cite>booking_id</cite>)</p>
+</dd>
+</dl>
+<p>) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;</p>
+</dd>
+</dl>
+<p>“””)</p>
+<dl class="simple">
+<dt>cursor.execute(</dt><dd><p>“INSERT IGNORE INTO <cite>bookings</cite> VALUES (NULL,1, 1, ‘2020-04-07’, ‘13:45’, ‘2020-04-10’, ‘14:45’, ”
+“‘155.00’, ‘booked’ ,NULL);”)</p>
+</dd>
+</dl>
+<p>self.connection.commit()</p>
+</dd>
+</dl>
+</dd>
+<dt>def tearDown(self):</dt><dd><dl class="simple">
+<dt>try:</dt><dd><p>self.connection.close()</p>
+</dd>
+<dt>except:</dt><dd><p>pass</p>
+</dd>
+<dt>finally:</dt><dd><p>self.connection = None</p>
+</dd>
+</dl>
+</dd>
+<dt>def countCars(self):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“select count(*) from cars_list”)
+return cursor.fetchone()[0]</p>
+</dd>
+</dl>
+</dd>
+<dt>def countBookedCars(self):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“select count(*) from bookings where booking_status = ‘booked’”)
+return cursor.fetchone()[0]</p>
+</dd>
+</dl>
+</dd>
+<dt>def countAvailableCarTypes(self):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“select * ,count(distinct car_type) from cars_list where status = ‘available’”)
+return cursor.fetchone()[0]</p>
+</dd>
+</dl>
+</dd>
+<dt>def countAvailableCars(self):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“select count(*) from cars_list where status = ‘available’”)
+return cursor.fetchone()[0]</p>
+</dd>
+</dl>
+</dd>
+<dt>def countCustomers(self):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“select count(*) from customers”)
+return cursor.fetchone()[0]</p>
+</dd>
+</dl>
+</dd>
+<dt>def countBookings(self):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“select count(*) from bookings”)
+return cursor.fetchone()[0]</p>
+</dd>
+</dl>
+</dd>
+<dt>def carExists(self, car_id):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“select count(*) from cars_list where car_id = %s”, (car_id,))
+return cursor.fetchone()</p>
+</dd>
+</dl>
+</dd>
+<dt>def accountExists(self, email):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“select count(*) from customers where email= %s”, (email,))
+return cursor.fetchone()[0]</p>
+</dd>
+</dl>
+</dd>
+<dt>def bookingExists(self, customer_id, car_id):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“select count(*) from bookings where customer_id= %s and car_id= %s”, (customer_id, car_id))
+return cursor.fetchone()[0]</p>
+</dd>
+</dl>
+</dd>
+<dt>def countBookingHistory(self, booking_id):</dt><dd><dl class="simple">
+<dt>with self.connection.cursor() as cursor:</dt><dd><p>cursor.execute(“select count(*) from bookings where booking_id= %s “, (booking_id,))
+return cursor.fetchone()[0]</p>
+</dd>
+</dl>
+</dd>
+<dt>def countCarConflicts(self, pickup_date, return_date):</dt><dd><dl>
+<dt>with self.connection.cursor() as cursor:</dt><dd><dl class="simple">
+<dt>cursor.execute(“SELECT car_id FROM bookings WHERE (%s &lt;= return_date AND %s &gt;= pickup_date)”,</dt><dd><p>(pickup_date, return_date))</p>
+</dd>
+</dl>
+<p>return cursor.fetchone()</p>
+</dd>
+</dl>
+</dd>
+<dt>def test_insertAccount(self):</dt><dd><dl class="simple">
+<dt>with DatabaseUtils(self.connection) as db:</dt><dd><p>count = self.countCustomers()
+db.insert_account(‘John’, ‘Doe’, <a class="reference external" href="mailto:'john&#37;&#52;&#48;gmail&#46;com">‘john<span>&#64;</span>gmail<span>&#46;</span>com</a>’, ‘123’)
+self.assertTrue(count + 1 == self.countCustomers())</p>
+</dd>
+</dl>
+</dd>
+<dt>def test_loginAccount(self):</dt><dd><dl>
+<dt>with DatabaseUtils(self.connection) as db:</dt><dd><p>results = db.login_account(<a class="reference external" href="mailto:'abc&#37;&#52;&#48;gmail&#46;com">‘abc<span>&#64;</span>gmail<span>&#46;</span>com</a>’, ‘123’)
+if (results == None):</p>
+<blockquote>
+<div><p>count = 0</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>count = 1</p>
+</dd>
+</dl>
+<p>self.assertTrue(self.accountExists(<a class="reference external" href="mailto:'abc&#37;&#52;&#48;gmail&#46;com">‘abc<span>&#64;</span>gmail<span>&#46;</span>com</a>’) == count)</p>
+</dd>
+</dl>
+</dd>
+<dt>def test_getUser(self):</dt><dd><dl>
+<dt>with DatabaseUtils(self.connection) as db:</dt><dd><p>results = db.get_an_user(<a class="reference external" href="mailto:'abc&#37;&#52;&#48;gmail&#46;com">‘abc<span>&#64;</span>gmail<span>&#46;</span>com</a>’)
+if results == None:</p>
+<blockquote>
+<div><p>count = 0</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>count = 1</p>
+</dd>
+</dl>
+<p>self.assertTrue(self.accountExists(“<a class="reference external" href="mailto:abc&#37;&#52;&#48;gmail&#46;com">abc<span>&#64;</span>gmail<span>&#46;</span>com</a>”) == count)</p>
+</dd>
+</dl>
+</dd>
+<dt>def test_getAllAvailableCars(self):</dt><dd><dl class="simple">
+<dt>with DatabaseUtils(self.connection) as db:</dt><dd><p>self.assertTrue(self.countAvailableCars() == len(db.get_all_available_cars()))</p>
+</dd>
+</dl>
+</dd>
+<dt>def test_getCustomerBookingHistory(self):</dt><dd><dl class="simple">
+<dt>with DatabaseUtils(self.connection) as db:</dt><dd><p>count = self.countBookingHistory(‘1’)
+self.assertTrue(count == len(db.get_customer_booking_history(‘1’)))</p>
+</dd>
+</dl>
+</dd>
+<dt>def test_InsertBooking(self):</dt><dd><dl class="simple">
+<dt>with DatabaseUtils(self.connection) as db:</dt><dd><p>count = self.countBookings()
+db.insert_booking(1, 1, ‘07-4-2020’, ‘13:45’, ‘10-4-2020’, ‘13:45’, “booked”, 100)
+self.assertTrue(count + 1 == self.countBookings())
+db.insert_booking(2, 2, ‘07-4-2020’, ‘13:45’, ‘10-4-2020’, ‘13:45’, “booked”, 155)
+self.assertTrue(count + 2 == self.countBookings())</p>
+</dd>
+</dl>
+</dd>
+<dt>def test_updateBooking(self):</dt><dd><dl class="simple">
+<dt>with DatabaseUtils(self.connection) as db:</dt><dd><p>count = self.countBookedCars()
+db.update_booking(‘1’, ‘available’)
+self.assertTrue((count - 1 == self.countBookedCars()))</p>
+</dd>
+</dl>
+</dd>
+<dt>def test_validateCollection(self):</dt><dd><dl>
+<dt>with DatabaseUtils(self.connection) as db:</dt><dd><p>results = db.validate_collection(‘1’, ‘1’)
+if (results == None):</p>
+<blockquote>
+<div><p>dbcount = 0</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>dbcount = 1</p>
+</dd>
+</dl>
+<p>existcount = self.bookingExists(‘1’, ‘1’)
+self.assertTrue(existcount == dbcount)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>if __name__ == “__main__”:</dt><dd><p>unittest.main(verbosity=2)</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="test-ui">
+<h1>TEST_UI<a class="headerlink" href="#test-ui" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<p>import os
+import unittest
+from main import app</p>
+<dl>
+<dt>class TestFlaskApp(unittest.TestCase):</dt><dd><dl>
+<dt>def setUp(self):</dt><dd><p>app.config[‘TESTING’] = True
+app.config[‘WTF_CSRF_ENABLED’] = False
+app.config[‘DEBUG’] = False
+self.app = app.test_client()
+self.assertEqual(app.debug, False)</p>
+</dd>
+<dt>def tearDown(self):</dt><dd><p>pass</p>
+</dd>
+<dt>def Register(self, firstname, lastname, email, password):</dt><dd><dl class="simple">
+<dt>return self.app.post(</dt><dd><p>‘/register’,
+data=dict(first_name=firstname, last_name=lastname, email=email, password=password),
+follow_redirects=True</p>
+</dd>
+</dl>
+<p>)</p>
+</dd>
+<dt>def Login(self, email, password):</dt><dd><dl class="simple">
+<dt>return self.app.post(</dt><dd><p>‘/carrental’,
+data=dict(email=email, password=password),
+follow_redirects=True</p>
+</dd>
+</dl>
+<p>)</p>
+</dd>
+<dt>def Logout(self, email, password):</dt><dd><dl class="simple">
+<dt>return self.app.get(</dt><dd><p>‘/carrental/logout’,
+follow_redirects=True</p>
+</dd>
+</dl>
+<p>)</p>
+</dd>
+<dt>def test_mainHomePage(self):</dt><dd><p>response = self.app.get(‘/’, follow_redirects=True)
+self.assertEqual(response.status_code, 200)</p>
+</dd>
+<dt>def test_carRental(self):</dt><dd><p>response = self.app.get(‘/carrental’, follow_redirects=True)
+self.assertEqual(response.status_code, 200)</p>
+</dd>
+<dt>def test_Logout(self):</dt><dd><p>response = self.app.get(‘/carrental/logout’, follow_redirects=True)
+self.assertEqual(response.status_code, 200)</p>
+</dd>
+<dt>def test_Register(self):</dt><dd><p>response = self.app.get(‘/register’, follow_redirects=True)
+self.assertEqual(response.status_code, 200)</p>
+<p>registeruser = self.Register(‘xyz’, ‘abc’, <a class="reference external" href="mailto:'xyz&#37;&#52;&#48;gmail&#46;com">‘xyz<span>&#64;</span>gmail<span>&#46;</span>com</a>’, ‘123’)
+self.assertEqual(registeruser.status_code, 200)
+self.assertIn(b’You have successfully registered!’, registeruser.data)</p>
+</dd>
+<dt>def test_Login(self):</dt><dd><p>response = self.app.get(‘/carrental’, follow_redirects=True)
+self.assertEqual(response.status_code, 200)</p>
+</dd>
+<dt>def test_carRentalHome(self):</dt><dd><p>response = self.app.get(‘/carrental/home’, follow_redirects=True)
+self.assertEqual(response.status_code, 200)</p>
+</dd>
+<dt>def test_carRentalProfile(self):</dt><dd><p>response = self.app.get(‘/carrental/profile’, follow_redirects=True)
+self.assertEqual(response.status_code, 200)</p>
+</dd>
+<dt>def test_carRentalSearch(self):</dt><dd><p>response = self.app.get(‘/carrental/search’, follow_redirects=True)
+self.assertEqual(response.status_code, 200)</p>
+</dd>
+<dt>def test_carRentalBookingHistory(self):</dt><dd><p>response = self.app.get(‘/carrental/bookinghistory’, follow_redirects=True)
+self.assertEqual(response.status_code, 200)</p>
+</dd>
+<dt>def test_carRentalBookingLocation(self):</dt><dd><p>response = self.app.get(‘/carrental/location’, follow_redirects=True)
+self.assertEqual(response.status_code, 200)</p>
+</dd>
+</dl>
+</dd>
+<dt>if __name__ == “__main__”:</dt><dd><p>unittest.main(verbosity=2)</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="test-agent-database">
+<h1>TEST_AGENT_DATABASE<a class="headerlink" href="#test-agent-database" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<p>import sqlite3
+from sqlite3 import Error
+from datetime import datetime
+import math
+import unittest
+from database_utils import Database_utils</p>
+<dl>
+<dt>class TestDatabaseUtils(unittest.TestCase):</dt><dd><p>database_name = ‘agentpi_db’</p>
+<dl>
+<dt>def setUp(self):</dt><dd><p>self.con = sqlite3.connect(TestDatabaseUtils.database_name)
+cursorObj = self.con.cursor()</p>
+<p>cursorObj.execute(“DROP TABLE IF EXISTS car_details”)
+cursorObj.execute(“DROP TABLE IF EXISTS user_details”)
+cursorObj.execute(</p>
+<blockquote>
+<div><p>“CREATE TABLE IF NOT EXISTS car_details(id integer PRIMARY KEY, car_id real, make_name text,model_name text,seating_capacity real, colour text, car_type text,registration_no real ,lat real ,lng real ,UNIQUE(<cite>car_id</cite> ,`registration_no`))”)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>cursorObj.execute(</dt><dd><p>“CREATE TABLE IF NOT EXISTS user_details(id integer PRIMARY KEY, username text, password text,customer_id ,face_id real ,UNIQUE(customer_id,face_id))”)</p>
+</dd>
+<dt>cursorObj.execute(</dt><dd><p>“INSERT OR IGNORE INTO car_details(car_id , make_name ,model_name ,seating_capacity, colour, car_type ,registration_no ,lat ,lng ) VALUES (1 ,’Sedan’ ,’Toyota’ ,4 ,’red’ ,’suv’ ,32 ,-9 ,-9 )”)</p>
+</dd>
+<dt>cursorObj.execute(</dt><dd><p>“INSERT OR IGNORE INTO user_details(username , password ,customer_id ,face_id) VALUES (<a class="reference external" href="mailto:'abc&#37;&#52;&#48;gmail&#46;com">‘abc<span>&#64;</span>gmail<span>&#46;</span>com</a>’ ,’123’ ,6 ,1)”)</p>
+</dd>
+</dl>
+<p>self.con.commit()</p>
+</dd>
+<dt>def tearDown(self):</dt><dd><dl class="simple">
+<dt>try:</dt><dd><p>self.con.sqlite3_close()</p>
+</dd>
+<dt>except:</dt><dd><p>pass</p>
+</dd>
+<dt>finally:</dt><dd><p>self.con = None</p>
+</dd>
+</dl>
+</dd>
+<dt>def countUserEntries(self):</dt><dd><p>cursorObj = self.con.cursor()
+cursorObj.execute(“select count(*) from user_details”)
+return cursorObj.fetchone()[0]</p>
+</dd>
+<dt>def countCarEntries(self):</dt><dd><p>cursorObj = self.con.cursor()
+cursorObj.execute(“select count(*) from car_details”)
+return cursorObj.fetchone()[0]</p>
+</dd>
+<dt>def test_getCarData(self):</dt><dd><p>db = Database_utils(self.con)
+data = db.get_car_data()</p>
+<dl class="simple">
+<dt>if data:</dt><dd><p>count = 1</p>
+</dd>
+<dt>else:</dt><dd><p>count = 0</p>
+</dd>
+</dl>
+<p>self.assertTrue(self.countCarEntries() == count)</p>
+</dd>
+<dt>def test_getFaceData(self):</dt><dd><p>db = Database_utils(self.con)
+data = db.get_face_data(1)</p>
+<dl class="simple">
+<dt>if data:</dt><dd><p>count = 1</p>
+</dd>
+<dt>else:</dt><dd><p>count = 0</p>
+</dd>
+</dl>
+<p>self.assertTrue(self.countUserEntries() == count)</p>
+</dd>
+<dt>def test_getUserData(self):</dt><dd><p>db = Database_utils(self.con)
+data = db.get_user_data()</p>
+<dl class="simple">
+<dt>if data:</dt><dd><p>count = 1</p>
+</dd>
+<dt>else:</dt><dd><p>count = 0</p>
+</dd>
+</dl>
+<p>self.assertTrue(self.countUserEntries() == count)</p>
+</dd>
+</dl>
+</dd>
+<dt>if __name__ == “__main__”:</dt><dd><p>unittest.main(verbosity=2)</p>
+</dd>
+</dl>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to Unit Tests Sphinx’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Hao Li
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
