@@ -1,8 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, session
 from passlib.hash import sha256_crypt
 from datetime import datetime
-import pymysql  # MySQLdb  # pymysql
-import math
+import pymysql  # MySQLdb or pymysql both able to use
 
 
 class DatabaseUtils:
@@ -100,11 +98,6 @@ class DatabaseUtils:
                     PRIMARY KEY (`booking_id`)                  
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
             """)
-            # cursor.execute(
-            #     "INSERT IGNORE INTO `bookings` VALUES (NULL,1, 1, '2020-04-07', '13:45', '2020-04-10', '14:45', "
-            #     "'155.00', 'booked' ,NULL);")
-            # cursor.execute("INSERT IGNORE INTO `bookings` VALUES (NULL, 1, 2, '10-03-2020', '15-03-2020', '13:45', "
-            #                "'123.00', 'booked', NULL);")
 
         self.connection.commit()
 
@@ -119,12 +112,6 @@ class DatabaseUtils:
         cursor.execute("SELECT * FROM customers WHERE email = %s", (email))
 
         return cursor.fetchone()
-
-    # def agent_login_account(self, email, password):
-    #     cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-    #     cursor.execute("SELECT * FROM customers WHERE email = %s AND password = %s", (email, password))
-    #
-    #     return cursor.fetchone()
 
     def get_an_user(self, email):
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
@@ -177,7 +164,6 @@ class DatabaseUtils:
         else:
             conflicts_arr['count'] = count
             conflicts_arr['cars'] = ''
-        # cursor.execute("SELECT * FROM bookings WHERE (%s <= return_date AND %s >= pickup_date) OR (%s <= return_date AND %s >= pickup_date)", (pickup_newformat, return_newformat, pickup_newformat, return_newformat))
 
         return conflicts_arr
 
@@ -206,44 +192,9 @@ class DatabaseUtils:
         return_newformat = return_datetimeobject.strftime('%Y-%m-%d')
 
         cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-        # cursor.execute("Select * "
-        #                "from cars_list "
-        #                "where "
-        #                "status = 'available' "
-        #                "AND car_type = %s "
-        #                "AND car_id NOT IN ( "
-        #                "    SELECT car_id "
-        #                "    FROM bookings "
-        #                "    WHERE ( %s <= return_date AND %s >= pickup_date) "
-        #                "    OR( %s <= return_date AND %s >= pickup_date))",
-        #                (car_type, pickup_newformat, return_newformat, pickup_newformat, return_newformat))
-
         cursor.execute(mainquery, (pickup_newformat, return_newformat, pickup_newformat, return_newformat))
 
         return cursor.fetchall()
-
-    # `make_name` varchar(100) NOT NULL,
-    # `model_name` varchar(100) DEFAULT NULL,
-    # `seating_capacity` varchar(1) DEFAULT NULL,
-    # `colour` varchar(20) DEFAULT NULL,
-    # `car_type` int(1) DEFAULT NULL
-
-    # def get_all_available_car_type(self, car_type):
-    #     cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-    #     # cursor.execute("SELECT * FROM cars_list WHERE status = 'available' AND car_type = %s", car_type)
-    #     cursor.execute("SELECT * FROM cars_list WHERE status = 'available' AND car_type = %s", car_type)
-    #
-    #     # variable_name = ''
-    #     # if cartype != 0:
-    #     #     variable_name .= 'car_type = variable+passed AND'
-    #     # elif car_make != 0:
-    #     #     variable_name .= 'carmake= varialbe+passed'
-    #     # elif color != 0:
-    #     #     variable_name .= 'carmake= varialbe+passed'
-    #
-    #     # cursor.execute("SELECT * FROM cars_list WHERE variable_name", str(avoid_lis))
-    #
-    #     return cursor.fetchall()
 
     def insert_booking(self, customer_id, car_id, pickupDate, piuckup_time, returnDate, return_time, booking_status,
                        booking_amount):

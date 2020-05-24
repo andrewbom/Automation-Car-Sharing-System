@@ -19,10 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="36e98ca0-a393-4975-8007-af639e323081" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/masterpi/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/masterpi/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="36e98ca0-a393-4975-8007-af639e323081" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,6 +29,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1cAZrJILfucxjxf4HXdqSOQJdZP" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -43,7 +41,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python tests.Unittests for test_databaseutils.TestDatabaseUtils.test_loginAccount">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="IOT_Assignment_2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -65,8 +63,23 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests for test_databaseutils.TestDatabaseUtils.test_loginAccount" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="IOT_Assignment_2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/masterpi" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_databaseutils.TestDatabaseUtils.test_loginAccount&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Unittests for test_databaseutils.TestDatabaseUtils.test_loginAccount" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
@@ -105,30 +118,30 @@
       <screen x="0" y="23" width="1440" height="827" />
     </state>
     <state x="417" y="51" key="#main/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590251495698" />
-    <state width="1419" height="156" key="GridCell.Tab.0.bottom" timestamp="1590316537675">
-      <screen x="0" y="23" width="1440" height="827" />
+    <state width="1899" height="187" key="GridCell.Tab.0.bottom" timestamp="1590320578535">
+      <screen x="0" y="23" width="1920" height="1032" />
     </state>
     <state width="1419" height="156" key="GridCell.Tab.0.bottom/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590312639268" />
     <state width="1419" height="156" key="GridCell.Tab.0.bottom/0.23.1440.827@0.23.1440.827" timestamp="1590316537675" />
-    <state width="939" height="278" key="GridCell.Tab.0.bottom/0.23.1920.1032@0.23.1920.1032" timestamp="1590263813188" />
-    <state width="1419" height="156" key="GridCell.Tab.0.center" timestamp="1590316537674">
-      <screen x="0" y="23" width="1440" height="827" />
+    <state width="1899" height="187" key="GridCell.Tab.0.bottom/0.23.1920.1032@0.23.1920.1032" timestamp="1590320578535" />
+    <state width="1899" height="187" key="GridCell.Tab.0.center" timestamp="1590320578534">
+      <screen x="0" y="23" width="1920" height="1032" />
     </state>
     <state width="1419" height="156" key="GridCell.Tab.0.center/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590312639267" />
     <state width="1419" height="156" key="GridCell.Tab.0.center/0.23.1440.827@0.23.1440.827" timestamp="1590316537674" />
-    <state width="939" height="278" key="GridCell.Tab.0.center/0.23.1920.1032@0.23.1920.1032" timestamp="1590263813188" />
-    <state width="1419" height="156" key="GridCell.Tab.0.left" timestamp="1590316537674">
-      <screen x="0" y="23" width="1440" height="827" />
+    <state width="1899" height="187" key="GridCell.Tab.0.center/0.23.1920.1032@0.23.1920.1032" timestamp="1590320578534" />
+    <state width="1899" height="187" key="GridCell.Tab.0.left" timestamp="1590320578533">
+      <screen x="0" y="23" width="1920" height="1032" />
     </state>
     <state width="1419" height="156" key="GridCell.Tab.0.left/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590312639266" />
     <state width="1419" height="156" key="GridCell.Tab.0.left/0.23.1440.827@0.23.1440.827" timestamp="1590316537674" />
-    <state width="939" height="278" key="GridCell.Tab.0.left/0.23.1920.1032@0.23.1920.1032" timestamp="1590263813187" />
-    <state width="1419" height="156" key="GridCell.Tab.0.right" timestamp="1590316537675">
-      <screen x="0" y="23" width="1440" height="827" />
+    <state width="1899" height="187" key="GridCell.Tab.0.left/0.23.1920.1032@0.23.1920.1032" timestamp="1590320578533" />
+    <state width="1899" height="187" key="GridCell.Tab.0.right" timestamp="1590320578534">
+      <screen x="0" y="23" width="1920" height="1032" />
     </state>
     <state width="1419" height="156" key="GridCell.Tab.0.right/0.23.1440.827/1440.23.1920.1057@0.23.1440.827" timestamp="1590312639267" />
     <state width="1419" height="156" key="GridCell.Tab.0.right/0.23.1440.827@0.23.1440.827" timestamp="1590316537675" />
-    <state width="939" height="278" key="GridCell.Tab.0.right/0.23.1920.1032@0.23.1920.1032" timestamp="1590263813188" />
+    <state width="1899" height="187" key="GridCell.Tab.0.right/0.23.1920.1032@0.23.1920.1032" timestamp="1590320578534" />
     <state x="145" y="252" width="670" height="676" key="search.everywhere.popup" timestamp="1589994287261">
       <screen x="0" y="23" width="1920" height="1032" />
     </state>
