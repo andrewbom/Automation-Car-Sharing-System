@@ -4,9 +4,9 @@ import pymysql  # MySQLdb or pymysql both able to use
 
 
 class DatabaseUtils:
-    HOST = "34.87.232.2"  # google cloud IP address
-    USER = "root"  # google cloud sql user name
-    PASSWORD = "123456789"  # google cloud sql password
+    HOST = ""  # google cloud IP address
+    USER = ""  # google cloud sql user name
+    PASSWORD = ""  # google cloud sql password
     DATABASE = "Pythonlogin"
 
     def __init__(self, connection=None):
