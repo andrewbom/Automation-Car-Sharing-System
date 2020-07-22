@@ -15,7 +15,7 @@ class Car_location:
         self.mac_address = (':'.join(['{:02x}'.format((uuid.getnode() >> ele) & 0xff)
                                       for ele in range(0, 8 * 6, 8)][::-1]))
 
-        self.URL = "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCntWQD7A7rjkkwSi0-5ehvZt_eg3_6Dqs"
+        self.URL = "https://www.googleapis.com/geolocation/v1/geolocate?key="
 
     def truncate(self, number, digits) -> float:
         multiplier = 10.0 ** digits
